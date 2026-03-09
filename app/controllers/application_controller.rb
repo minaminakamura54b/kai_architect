@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def logged_in_user?
+  def logged_in_user
     unless logged_in?
       store_location
       flash[:danger] = "Please log in."
@@ -11,5 +11,5 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  
+
 end
