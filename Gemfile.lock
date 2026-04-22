@@ -369,11 +369,14 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (1.6.1-aarch64-linux)
-    sqlite3 (1.6.1-arm-linux)
-    sqlite3 (1.6.1-arm64-darwin)
-    sqlite3 (1.6.1-x86_64-darwin)
-    sqlite3 (1.6.1-x86_64-linux)
+    sqlite3 (2.9.3-aarch64-linux-gnu)
+    sqlite3 (2.9.3-aarch64-linux-musl)
+    sqlite3 (2.9.3-arm-linux-gnu)
+    sqlite3 (2.9.3-arm-linux-musl)
+    sqlite3 (2.9.3-arm64-darwin)
+    sqlite3 (2.9.3-x86_64-darwin)
+    sqlite3 (2.9.3-x86_64-linux-gnu)
+    sqlite3 (2.9.3-x86_64-linux-musl)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     stringio (3.2.0)
@@ -453,7 +456,7 @@ DEPENDENCIES
   selenium-webdriver (= 4.8.3)
   solargraph (= 0.56.2)
   sprockets-rails (= 3.4.2)
-  sqlite3 (= 1.6.1)
+  sqlite3 (= 2.9.3)
   stimulus-rails (= 1.2.1)
   turbo-rails (= 1.4.0)
   web-console (= 4.2.0)
@@ -598,11 +601,14 @@ CHECKSUMS
   solargraph (0.56.2) sha256=b3cc0b3973071d7206238a2bcea7c254deed3ed37807f4440cadf0452f7752b8
   sprockets (4.2.2) sha256=761e5a49f1c288704763f73139763564c845a8f856d52fba013458f8af1b59b1
   sprockets-rails (3.4.2) sha256=36d6327757ccf7460a00d1d52b2d5ef0019a4670503046a129fa1fb1300931ad
-  sqlite3 (1.6.1-aarch64-linux) sha256=99d334b06d81edf5ab112c5025908d4228afa8031c19117ab21e9dd7752094cd
-  sqlite3 (1.6.1-arm-linux) sha256=d286563c448269489b2be5655ac8330e522aa3e2c3088b612c1bc533ec2b6319
-  sqlite3 (1.6.1-arm64-darwin) sha256=a877b19ddabd30960e22aa79a0f4a4126f87f51df4be88050034e71293d7477a
-  sqlite3 (1.6.1-x86_64-darwin) sha256=074082d1fdda1f2e326b4860e2b12b35988823a31847e6b6c2d58dad0b37c1ce
-  sqlite3 (1.6.1-x86_64-linux) sha256=b36fee5821ed28b547327317a0ee63b0cb2191060dbfb1ea40d93d343dfc8f59
+  sqlite3 (2.9.3-aarch64-linux-gnu) sha256=ca6dd1cf6c037ccc8d3e5837190cc61ef15466092014951235641b5c4c8ab4ee
+  sqlite3 (2.9.3-aarch64-linux-musl) sha256=ff017a36c463d02e9f0be7a6224521371128024e6a05ed16994afa5c037afbba
+  sqlite3 (2.9.3-arm-linux-gnu) sha256=fd8b74337a66bdaf746b97d65e6c9a2faff803c8f72d6b107fb880972815d072
+  sqlite3 (2.9.3-arm-linux-musl) sha256=792ae9a786bb37dbdc4c443c527bc91df423aac10e472f76d5cf5a9ac6d51980
+  sqlite3 (2.9.3-arm64-darwin) sha256=76b265d3d57362d3e38338f24f50a0c9cd47a4599c9cfbb578fac125d2299906
+  sqlite3 (2.9.3-x86_64-darwin) sha256=087e7cc4efc73d83e76354f028c4d1dc14552a05acc74f60e77a55f1bee6ef22
+  sqlite3 (2.9.3-x86_64-linux-gnu) sha256=85200a10c6cf5c60085fcca411a3168c5fba8fda3e2b1b0109ec277d7c226d46
+  sqlite3 (2.9.3-x86_64-linux-musl) sha256=b6d0437046d9180335dea1aa0592802e65c4f7b57409d63f14408211bf28536b
   stimulus-rails (1.2.1) sha256=831bbcc0c12ea9c751e0a96b85d9908a0e4b42031964724d5b507166e06f0e8a
   stringio (3.2.0) sha256=c37cb2e58b4ffbd33fe5cd948c05934af997b36e0b6ca6fdf43afa234cf222e1
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
