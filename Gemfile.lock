@@ -303,9 +303,9 @@ GEM
     regexp_parser (2.12.0)
     reline (0.5.10)
       io-console (~> 0.5)
-    repl_type_completor (0.1.10)
+    repl_type_completor (0.1.15)
       prism (~> 1.0)
-      rbs (>= 2.7.0, < 4.0.0)
+      rbs (>= 2.7.0)
     reverse_markdown (3.0.2)
       nokogiri
     rexml (3.4.4)
@@ -448,7 +448,7 @@ DEPENDENCIES
   rails (= 7.0.4.3)
   rails-controller-testing (= 1.0.5)
   reline (= 0.5.10)
-  repl_type_completor (= 0.1.10)
+  repl_type_completor (= 0.1.15)
   sassc-rails (= 2.1.2)
   selenium-webdriver (= 4.8.3)
   solargraph (= 0.56.2)
@@ -583,7 +583,7 @@ CHECKSUMS
   rdoc (7.2.0) sha256=8650f76cd4009c3b54955eb5d7e3a075c60a57276766ebf36f9085e8c9f23192
   regexp_parser (2.12.0) sha256=35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb
   reline (0.5.10) sha256=1660c969a792ebd034e6ceee8ca628f3b6698dcdb34f7a282a5edda37b958166
-  repl_type_completor (0.1.10) sha256=1fccf9b502a3d502daaa803748021839a110d13e383f4efbb6f9eff1ad041161
+  repl_type_completor (0.1.15) sha256=dec24c45fffefa3b55b19115fee20b3446c2f75c7605f579ab6047e931edd335
   reverse_markdown (3.0.2) sha256=818ebb92ce39dbb1a291690dd1ec9a6d62530d4725296b17e9c8f668f9a5b8af
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rubocop (1.86.1) sha256=44415f3f01d01a21e01132248d2fd0867572475b566ca188a0a42133a08d4531
