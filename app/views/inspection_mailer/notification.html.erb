@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background:#f0f4f8; margin:0; padding:0; }
+    .wrapper { max-width:560px; margin:32px auto; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.08); }
+    .header { background:linear-gradient(135deg,#1a3a5c,#2a5298); padding:28px 32px; }
+    .header h1 { color:#fff; font-size:20px; margin:0; }
+    .header p { color:rgba(255,255,255,.8); font-size:13px; margin:4px 0 0; }
+    .body { padding:28px 32px; }
+    .label { font-size:12px; color:#94a3b8; font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px; }
+    .value { font-size:15px; color:#1e293b; margin-bottom:16px; }
+    .badge { display:inline-block; padding:3px 10px; border-radius:6px; font-size:12px; font-weight:600; }
+    .badge-passed  { background:#d1fae5; color:#065f46; }
+    .badge-failed  { background:#fee2e2; color:#991b1b; }
+    .badge-pending { background:#fef3c7; color:#92400e; }
+    .divider { border:none; border-top:1px solid #e2e8f0; margin:20px 0; }
+    .footer { background:#f8fafc; padding:16px 32px; font-size:12px; color:#94a3b8; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>🔍 点検記録のお知らせ</h1>
+      <p>Kai Architect</p>
+    </div>
+    <div class="body">
+      <p style="color:#475569; margin-top:0;">以下の点検記録が作成されました。</p>
+
+      <div class="label">現場</div>
+      <div class="value"><strong><%= @site.name %></strong><br>
+        <span style="font-size:13px; color:#64748b;">📍 <%= @site.address %></span>
+      </div>
+
+      <div class="label">点検日時</div>
+      <div class="value"><%= l @inspection.inspected_at, format: :default %></div>
+
+      <div class="label">担当者</div>
+      <div class="value"><%= @user.name %></div>
+
+      <div class="label">ステータス</div>
+      <div class="value">
+        <span class="badge badge-<%= @inspection.status %>">
+          <%= I18n.t("enums.inspection.status.#{@inspection.status}", default: @inspection.status) %>
+        </span>
+      </div>
+
+      <div class="label">点検結果</div>
+      <div class="value" style="white-space:pre-line;"><%= @inspection.result %></div>
+
+      <% if @inspection.remarks.present? %>
+        <div class="label">備考</div>
+        <div class="value" style="white-space:pre-line;"><%= @inspection.remarks %></div>
+      <% end %>
+    </div>
+    <div class="footer">
+      このメールは Kai Architect から自動送信されています
+    </div>
+  </div>
+</body>
+</html>

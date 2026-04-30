@@ -1,0 +1,36 @@
+<%= form_with model: @site do |f| %>
+  <div class="mb-3">
+    <%= f.label :name, "現場名", class: "form-label fw-semibold" %>
+    <%= f.text_field :name,
+          class: "form-control #{'is-invalid' if @site.errors[:name].any?}",
+          placeholder: "例：○○ビル新築工事" %>
+    <div class="invalid-feedback"><%= @site.errors[:name].first %></div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :address, "住所", class: "form-label fw-semibold" %>
+    <%= f.text_field :address,
+          class: "form-control #{'is-invalid' if @site.errors[:address].any?}",
+          placeholder: "例：東京都渋谷区..." %>
+    <div class="invalid-feedback"><%= @site.errors[:address].first %></div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :status, "ステータス", class: "form-label fw-semibold" %>
+    <%= f.select :status,
+          [["稼働中", "active"], ["完了", "completed"], ["停止中", "suspended"]],
+          {},
+          class: "form-select" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :description, "備考・説明", class: "form-label fw-semibold" %>
+    <%= f.text_area :description, class: "form-control", rows: 4,
+          placeholder: "現場の概要や注意事項など" %>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= link_to "キャンセル", @site.new_record? ? sites_path : @site, class: "btn btn-outline-secondary" %>
+    <%= f.submit @site.new_record? ? "登録する" : "更新する", class: "btn btn-primary" %>
+  </div>
+<% end %>

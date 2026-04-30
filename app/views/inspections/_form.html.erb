@@ -1,0 +1,51 @@
+<%= form_with model: [@site, @inspection] do |f| %>
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <%= f.label :inspected_at, "点検日時", class: "form-label fw-semibold" %>
+      <%= f.datetime_local_field :inspected_at,
+            class: "form-control #{'is-invalid' if @inspection.errors[:inspected_at].any?}" %>
+      <div class="invalid-feedback"><%= @inspection.errors[:inspected_at].first %></div>
+    </div>
+    <div class="col-md-6">
+      <%= f.label :status, "ステータス", class: "form-label fw-semibold" %>
+      <%= f.select :status,
+            [["確認待ち", "pending"], ["合格", "passed"], ["不合格", "failed"]],
+            {},
+            class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :result, "点検結果", class: "form-label fw-semibold" %>
+    <%= f.text_area :result,
+          class: "form-control #{'is-invalid' if @inspection.errors[:result].any?}",
+          rows: 5, placeholder: "点検内容・確認事項・問題点などを記入してください" %>
+    <div class="invalid-feedback"><%= @inspection.errors[:result].first %></div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :remarks, "備考", class: "form-label fw-semibold" %>
+    <%= f.text_area :remarks, class: "form-control", rows: 3,
+          placeholder: "補足事項・次回対応事項など" %>
+  </div>
+
+  <% if @inspection.new_record? %>
+    <div class="mb-4 p-3 rounded" style="background:#f0f4f8; border:1.5px dashed #cbd5e1;">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span style="font-size:1.1rem;">📧</span>
+        <span class="fw-semibold" style="font-size:.9rem;">メール通知（任意）</span>
+      </div>
+      <label class="form-label small text-muted mb-1">通知先メールアドレス</label>
+      <%= text_field_tag "inspection[notify_email]", nil,
+            class: "form-control",
+            placeholder: "例：manager@example.com",
+            type: "email" %>
+      <div class="form-text">入力すると、登録完了後に指定のアドレスへ通知メールを送信します</div>
+    </div>
+  <% end %>
+
+  <div class="d-flex gap-2">
+    <%= link_to "キャンセル", site_inspections_path(@site), class: "btn btn-outline-secondary" %>
+    <%= f.submit @inspection.new_record? ? "記録する" : "更新する", class: "btn btn-primary" %>
+  </div>
+<% end %>

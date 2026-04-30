@@ -1,0 +1,39 @@
+<% content_for :title, "出張報告詳細" %>
+<div class="mb-3 text-muted small">
+  <%= link_to "現場一覧", sites_path %> › <%= link_to @site.name, @site %> › <%= link_to "出張報告", site_business_trips_path(@site) %> › 詳細
+</div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">出張報告詳細</h1>
+  <div class="d-flex gap-2">
+    <%= link_to "編集", edit_site_business_trip_path(@site, @business_trip), class: "btn btn-sm btn-outline-secondary" %>
+    <%= link_to "削除", site_business_trip_path(@site, @business_trip),
+          data: { turbo_method: :delete, confirm: "削除しますか？" },
+          class: "btn btn-sm btn-outline-danger" %>
+  </div>
+</div>
+
+<div class="card shadow-sm" style="max-width: 720px;">
+  <div class="card-body p-4">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">期間</dt>
+      <dd class="col-sm-9"><%= l @business_trip.started_at %> 〜 <%= l @business_trip.ended_at %></dd>
+
+      <dt class="col-sm-3">担当者</dt>
+      <dd class="col-sm-9"><%= @business_trip.user.name %></dd>
+
+      <dt class="col-sm-3">出張先</dt>
+      <dd class="col-sm-9"><%= @business_trip.destination %></dd>
+
+      <dt class="col-sm-3">目的</dt>
+      <dd class="col-sm-9"><%= @business_trip.purpose %></dd>
+
+      <% if @business_trip.report.present? %>
+        <dt class="col-sm-3">報告内容</dt>
+        <dd class="col-sm-9"><%= simple_format(@business_trip.report) %></dd>
+      <% end %>
+
+      <dt class="col-sm-3">経費</dt>
+      <dd class="col-sm-9"><%= @business_trip.expenses ? "#{number_with_delimiter(@business_trip.expenses.to_i)}円" : "未入力" %></dd>
+    </dl>
+  </div>
+</div>

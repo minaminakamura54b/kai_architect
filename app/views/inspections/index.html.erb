@@ -1,0 +1,61 @@
+<% content_for :title, "点検記録一覧 - #{@site.name}" %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "現場一覧", sites_path %></li>
+    <li class="breadcrumb-item"><%= link_to @site.name, @site %></li>
+    <li class="breadcrumb-item active">点検記録</li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <h1 class="page-title">🔍 点検記録 — <%= @site.name %></h1>
+  <%= link_to "＋ 点検を追加", new_site_inspection_path(@site), class: "btn btn-accent" %>
+</div>
+
+<% if @inspections.any? %>
+  <div class="table-card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>点検日時</th>
+          <th>担当者</th>
+          <th>結果概要</th>
+          <th>備考</th>
+          <th>ステータス</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @inspections.each do |inspection| %>
+          <tr>
+            <td class="text-nowrap fw-semibold"><%= l inspection.inspected_at, format: :short %></td>
+            <td><%= inspection.user.name %></td>
+            <td><%= truncate(inspection.result, length: 45) %></td>
+            <td class="text-muted small"><%= truncate(inspection.remarks, length: 35) %></td>
+            <td>
+              <span class="badge badge-<%= inspection.status %>">
+                <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+              </span>
+            </td>
+            <td class="text-end text-nowrap">
+              <%= link_to "詳細", site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-primary me-1" %>
+              <%= link_to "編集", edit_site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-secondary me-1" %>
+              <%= link_to "削除", site_inspection_path(@site, inspection),
+                    data: { turbo_method: :delete, confirm: "削除しますか？" },
+                    class: "btn btn-sm btn-outline-danger" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <p>点検記録がありません</p>
+      <%= link_to "最初の点検を記録する", new_site_inspection_path(@site), class: "btn btn-accent" %>
+    </div>
+  </div>
+<% end %>

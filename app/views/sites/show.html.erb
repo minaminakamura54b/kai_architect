@@ -1,0 +1,122 @@
+<% content_for :title, @site.name %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "現場一覧", sites_path %></li>
+    <li class="breadcrumb-item active"><%= @site.name %></li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <div class="d-flex align-items-center gap-3 flex-wrap">
+    <h1 class="page-title"><%= @site.name %></h1>
+    <span class="badge badge-site-<%= @site.status %> fs-6">
+      <%= I18n.t("enums.site.status.#{@site.status}", default: @site.status) %>
+    </span>
+  </div>
+  <div class="d-flex gap-2">
+    <%= link_to "編集", edit_site_path(@site), class: "btn btn-outline-secondary btn-sm" %>
+    <%= link_to "削除", @site,
+          data: { turbo_method: :delete, confirm: "「#{@site.name}」を削除しますか？" },
+          class: "btn btn-outline-danger btn-sm" %>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <p class="mb-1 text-muted small">📍 <%= @site.address %></p>
+    <% if @site.description.present? %>
+      <p class="mb-0 mt-2"><%= @site.description %></p>
+    <% end %>
+  </div>
+</div>
+
+<!-- 点検記録 -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <span class="section-title">🔍 点検記録</span>
+  <%= link_to "＋ 追加", new_site_inspection_path(@site), class: "btn btn-sm btn-accent" %>
+</div>
+
+<% if @site.inspections.any? %>
+  <div class="table-card mb-4">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>点検日時</th>
+          <th>担当者</th>
+          <th>結果概要</th>
+          <th>ステータス</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @site.inspections.order(inspected_at: :desc).limit(5).each do |inspection| %>
+          <tr>
+            <td class="text-nowrap"><%= l inspection.inspected_at, format: :short %></td>
+            <td><%= inspection.user.name %></td>
+            <td><%= truncate(inspection.result, length: 40) %></td>
+            <td>
+              <span class="badge badge-<%= inspection.status %>">
+                <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+              </span>
+            </td>
+            <td class="text-end">
+              <%= link_to "詳細", site_inspection_path(@site, inspection), class: "btn btn-xs btn-outline-primary btn-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= link_to "すべての点検記録を見る →", site_inspections_path(@site), class: "text-primary-custom fw-semibold small" %>
+<% else %>
+  <div class="card mb-4">
+    <div class="empty-state" style="padding:2rem;">
+      <p class="mb-2 text-muted small">点検記録がありません</p>
+    </div>
+  </div>
+<% end %>
+
+<hr class="my-4">
+
+<!-- 出張報告 -->
+<div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+  <span class="section-title">🚗 出張報告</span>
+  <%= link_to "＋ 追加", new_site_business_trip_path(@site), class: "btn btn-sm btn-accent" %>
+</div>
+
+<% if @site.business_trips.any? %>
+  <div class="table-card mb-4">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>期間</th>
+          <th>担当者</th>
+          <th>出張先</th>
+          <th>目的</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @site.business_trips.order(started_at: :desc).limit(5).each do |trip| %>
+          <tr>
+            <td class="text-nowrap"><%= l trip.started_at %> 〜 <%= l trip.ended_at %></td>
+            <td><%= trip.user.name %></td>
+            <td><%= trip.destination %></td>
+            <td><%= truncate(trip.purpose, length: 35) %></td>
+            <td class="text-end">
+              <%= link_to "詳細", site_business_trip_path(@site, trip), class: "btn btn-sm btn-outline-primary" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= link_to "すべての出張報告を見る →", site_business_trips_path(@site), class: "text-primary-custom fw-semibold small" %>
+<% else %>
+  <div class="card">
+    <div class="empty-state" style="padding:2rem;">
+      <p class="mb-2 text-muted small">出張報告がありません</p>
+    </div>
+  </div>
+<% end %>

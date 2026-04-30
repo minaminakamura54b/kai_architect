@@ -1,0 +1,69 @@
+ja:
+  date:
+    formats:
+      default: "%Y年%-m月%-d日"
+      short: "%m/%d"
+      long: "%Y年%-m月%-d日(%a)"
+    day_names: [日曜日, 月曜日, 火曜日, 水曜日, 木曜日, 金曜日, 土曜日]
+    abbr_day_names: [日, 月, 火, 水, 木, 金, 土]
+    month_names: [~, 1月, 2月, 3月, 4月, 5月, 6月, 7月, 8月, 9月, 10月, 11月, 12月]
+    abbr_month_names: [~, 1月, 2月, 3月, 4月, 5月, 6月, 7月, 8月, 9月, 10月, 11月, 12月]
+  time:
+    formats:
+      default: "%Y年%-m月%-d日 %H:%M"
+      short: "%m/%d %H:%M"
+      long: "%Y年%-m月%-d日 %H時%M分"
+  enums:
+    site:
+      status:
+        active: 稼働中
+        completed: 完了
+        suspended: 停止中
+    inspection:
+      status:
+        pending: 確認待ち
+        passed: 合格
+        failed: 不合格
+  activerecord:
+    models:
+      site: 現場
+      inspection: 点検記録
+      business_trip: 出張報告
+      user: ユーザー
+    attributes:
+      site:
+        name: 現場名
+        address: 住所
+        status: ステータス
+        description: 備考
+      inspection:
+        inspected_at: 点検日時
+        status: ステータス
+        result: 点検結果
+        remarks: 備考
+      business_trip:
+        started_at: 出発日
+        ended_at: 帰着日
+        destination: 出張先
+        purpose: 目的
+        report: 報告内容
+        expenses: 経費
+      user:
+        name: 氏名
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+  devise:
+    sessions:
+      signed_in: "ログインしました"
+      signed_out: "ログアウトしました"
+    registrations:
+      signed_up: "アカウントを登録しました"
+      updated: "アカウント情報を更新しました"
+    passwords:
+      send_instructions: "パスワードのリセット方法をメールで送信しました"
+      updated: "パスワードを変更しました"
+    failure:
+      invalid: "メールアドレスまたはパスワードが違います"
+      not_found_in_database: "メールアドレスまたはパスワードが違います"
+      unauthenticated: "ログインしてください"

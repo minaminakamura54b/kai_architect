@@ -1,0 +1,57 @@
+<% content_for :title, "出張報告一覧 - #{@site.name}" %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "現場一覧", sites_path %></li>
+    <li class="breadcrumb-item"><%= link_to @site.name, @site %></li>
+    <li class="breadcrumb-item active">出張報告</li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <h1 class="page-title">🚗 出張報告 — <%= @site.name %></h1>
+  <%= link_to "＋ 出張報告を追加", new_site_business_trip_path(@site), class: "btn btn-accent" %>
+</div>
+
+<% if @business_trips.any? %>
+  <div class="table-card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>期間</th>
+          <th>担当者</th>
+          <th>出張先</th>
+          <th>目的</th>
+          <th>経費</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @business_trips.each do |trip| %>
+          <tr>
+            <td class="text-nowrap fw-semibold"><%= l trip.started_at %> 〜 <%= l trip.ended_at %></td>
+            <td><%= trip.user.name %></td>
+            <td><%= trip.destination %></td>
+            <td><%= truncate(trip.purpose, length: 35) %></td>
+            <td><%= trip.expenses ? "#{number_with_delimiter(trip.expenses.to_i)}円" : "—" %></td>
+            <td class="text-end text-nowrap">
+              <%= link_to "詳細", site_business_trip_path(@site, trip), class: "btn btn-sm btn-outline-primary me-1" %>
+              <%= link_to "編集", edit_site_business_trip_path(@site, trip), class: "btn btn-sm btn-outline-secondary me-1" %>
+              <%= link_to "削除", site_business_trip_path(@site, trip),
+                    data: { turbo_method: :delete, confirm: "削除しますか？" },
+                    class: "btn btn-sm btn-outline-danger" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="empty-state">
+      <div class="empty-icon">🚗</div>
+      <p>出張報告がありません</p>
+      <%= link_to "最初の出張報告を追加", new_site_business_trip_path(@site), class: "btn btn-accent" %>
+    </div>
+  </div>
+<% end %>

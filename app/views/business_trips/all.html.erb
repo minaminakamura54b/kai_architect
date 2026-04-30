@@ -1,0 +1,47 @@
+<% content_for :title, "出張報告" %>
+
+<div class="page-header">
+  <h1 class="page-title">出張報告</h1>
+  <%= link_to "＋ 出張を記録", new_business_trip_path, class: "btn btn-accent" %>
+</div>
+
+<% if @business_trips.any? %>
+  <div class="table-card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>期間</th>
+          <th>現場</th>
+          <th>担当者</th>
+          <th>出張先</th>
+          <th>目的</th>
+          <th>経費</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @business_trips.each do |trip| %>
+          <tr>
+            <td class="text-nowrap fw-semibold"><%= l trip.started_at %> 〜 <%= l trip.ended_at %></td>
+            <td><%= link_to trip.site.name, trip.site, class: "text-primary-custom fw-semibold" %></td>
+            <td><%= trip.user.name %></td>
+            <td><%= trip.destination %></td>
+            <td><%= truncate(trip.purpose, length: 30) %></td>
+            <td><%= trip.expenses ? "#{number_with_delimiter(trip.expenses.to_i)}円" : "—" %></td>
+            <td class="text-end">
+              <%= link_to "詳細", site_business_trip_path(trip.site, trip), class: "btn btn-sm btn-outline-primary" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="empty-state">
+      <div class="empty-icon">🚗</div>
+      <p>出張報告がありません</p>
+      <%= link_to "最初の出張を記録する", new_business_trip_path, class: "btn btn-accent" %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,40 @@
+<% content_for :title, "点検記録詳細" %>
+<div class="mb-3 text-muted small">
+  <%= link_to "現場一覧", sites_path %> › <%= link_to @inspection.site.name, @inspection.site %> › <%= link_to "点検記録", site_inspections_path(@inspection.site) %> › 詳細
+</div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">点検記録詳細</h1>
+  <div class="d-flex gap-2">
+    <%= link_to "編集", edit_site_inspection_path(@inspection.site, @inspection), class: "btn btn-sm btn-outline-secondary" %>
+    <%= link_to "削除", site_inspection_path(@inspection.site, @inspection),
+          data: { turbo_method: :delete, confirm: "削除しますか？" },
+          class: "btn btn-sm btn-outline-danger" %>
+  </div>
+</div>
+
+<div class="card shadow-sm" style="max-width: 720px;">
+  <div class="card-body p-4">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">点検日時</dt>
+      <dd class="col-sm-9"><%= l @inspection.inspected_at, format: :short %></dd>
+
+      <dt class="col-sm-3">担当者</dt>
+      <dd class="col-sm-9"><%= @inspection.user.name %></dd>
+
+      <dt class="col-sm-3">ステータス</dt>
+      <dd class="col-sm-9">
+        <span class="badge <%= inspection_status_badge(@inspection.status) %>">
+          <%= I18n.t("enums.inspection.status.#{@inspection.status}", default: @inspection.status) %>
+        </span>
+      </dd>
+
+      <dt class="col-sm-3">点検結果</dt>
+      <dd class="col-sm-9"><%= simple_format(@inspection.result) %></dd>
+
+      <% if @inspection.remarks.present? %>
+        <dt class="col-sm-3">備考</dt>
+        <dd class="col-sm-9"><%= simple_format(@inspection.remarks) %></dd>
+      <% end %>
+    </dl>
+  </div>
+</div>

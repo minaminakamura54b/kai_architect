@@ -1,0 +1,38 @@
+<% content_for :title, "出張を記録 — 現場を選択" %>
+
+<div class="mb-3 text-muted small">
+  <%= link_to "← 出張報告一覧", all_business_trips_path, class: "text-decoration-none" %>
+</div>
+
+<div class="page-header">
+  <h1 class="page-title">どの現場の出張ですか？</h1>
+</div>
+
+<% if @sites.any? %>
+  <div class="row g-3" style="max-width: 720px;">
+    <% @sites.each do |site| %>
+      <div class="col-md-6">
+        <%= link_to new_site_business_trip_path(site), class: "card text-decoration-none site-card" do %>
+          <div class="site-card-top <%= site.status %>"></div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-1">
+              <span class="fw-bold" style="color:#1a3a5c;"><%= site.name %></span>
+              <span class="badge badge-site-<%= site.status %>">
+                <%= I18n.t("enums.site.status.#{site.status}", default: site.status) %>
+              </span>
+            </div>
+            <p class="text-muted small mb-0">📍 <%= site.address %></p>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card" style="max-width:480px;">
+    <div class="empty-state">
+      <div class="empty-icon">🏗</div>
+      <p>現場が登録されていません</p>
+      <%= link_to "現場を登録する", new_site_path, class: "btn btn-accent" %>
+    </div>
+  </div>
+<% end %>

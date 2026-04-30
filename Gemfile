@@ -2,6 +2,7 @@ source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 
+gem 'devise', '~> 4.9'
 ruby "3.2.9"
 gem 'image_processing'
 gem "active_storage_validations", "0.9.8"
@@ -32,6 +33,8 @@ group :development do
   gem "solargraph",          "0.56.2"
   gem "irb",                 "1.10.0"
   gem "repl_type_completor", "0.1.10"
+  gem "letter_opener"
+  gem "dotenv-rails"
 end
 
 group :test do

@@ -100,12 +100,12 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: host }
 
   config.action_mailer.smtp_settings = {
-    port: 2525,
-    address: "smtp.mailgun.org",
-    user_name: ENV["MAILGUN_SMTP_LOGIN"],
-    password: ENV["MAILGUN_SMTP_PASSWORD"],
-    domain: ENV["MAILGUN_DOMAIN"],
-    authentication: :plain
+    port:           587,
+    address:        "smtp.resend.com",
+    user_name:      "resend",
+    password:       ENV["RESEND_API_KEY"],
+    authentication: :plain,
+    enable_starttls_auto: true
   }
 
 end

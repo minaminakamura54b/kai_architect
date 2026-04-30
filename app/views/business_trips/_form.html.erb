@@ -1,0 +1,65 @@
+<%= form_with model: [@site, @business_trip] do |f| %>
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <%= f.label :started_at, "出発日", class: "form-label fw-semibold" %>
+      <%= f.date_field :started_at,
+            class: "form-control #{'is-invalid' if @business_trip.errors[:started_at].any?}" %>
+      <div class="invalid-feedback"><%= @business_trip.errors[:started_at].first %></div>
+    </div>
+    <div class="col-md-6">
+      <%= f.label :ended_at, "帰着日", class: "form-label fw-semibold" %>
+      <%= f.date_field :ended_at,
+            class: "form-control #{'is-invalid' if @business_trip.errors[:ended_at].any?}" %>
+      <div class="invalid-feedback"><%= @business_trip.errors[:ended_at].first %></div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :destination, "出張先", class: "form-label fw-semibold" %>
+    <%= f.text_field :destination,
+          class: "form-control #{'is-invalid' if @business_trip.errors[:destination].any?}",
+          placeholder: "例：大阪府大阪市" %>
+    <div class="invalid-feedback"><%= @business_trip.errors[:destination].first %></div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :purpose, "目的", class: "form-label fw-semibold" %>
+    <%= f.text_area :purpose,
+          class: "form-control #{'is-invalid' if @business_trip.errors[:purpose].any?}",
+          rows: 3, placeholder: "出張の目的・内容を記入してください" %>
+    <div class="invalid-feedback"><%= @business_trip.errors[:purpose].first %></div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :report, "報告内容", class: "form-label fw-semibold" %>
+    <%= f.text_area :report, class: "form-control", rows: 4,
+          placeholder: "出張の結果・成果・所感など" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :expenses, "経費（円）", class: "form-label fw-semibold" %>
+    <%= f.number_field :expenses, class: "form-control", placeholder: "0", step: 1, min: 0 %>
+  </div>
+
+  <% if @business_trip.new_record? %>
+    <div class="mb-4 p-3 rounded" style="background:#f0f4f8; border:1.5px dashed #cbd5e1;">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span style="font-size:1.1rem;">📧</span>
+        <span class="fw-semibold" style="font-size:.9rem;">メール通知（任意）</span>
+      </div>
+      <label class="form-label small text-muted mb-1">通知先メールアドレス</label>
+      <%= text_field_tag "business_trip[notify_email]", nil,
+            class: "form-control",
+            placeholder: "例：manager@example.com",
+            type: "email" %>
+      <div class="form-text">入力すると、登録完了後に指定のアドレスへ通知メールを送信します</div>
+    </div>
+  <% end %>
+
+  <div class="d-flex gap-2">
+    <%= link_to "キャンセル",
+          @business_trip.new_record? ? site_business_trips_path(@site) : site_business_trip_path(@site, @business_trip),
+          class: "btn btn-outline-secondary" %>
+    <%= f.submit @business_trip.new_record? ? "登録する" : "更新する", class: "btn btn-primary" %>
+  </div>
+<% end %>

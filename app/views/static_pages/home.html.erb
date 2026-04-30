@@ -1,0 +1,134 @@
+<% content_for :title, "ダッシュボード" %>
+
+<div class="page-header">
+  <h1 class="page-title">ダッシュボード</h1>
+  <%= link_to "＋ 現場を登録", new_site_path, class: "btn btn-accent" %>
+</div>
+
+<!-- 統計カード -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="stat-icon" style="background:#dbeafe;">🏗</div>
+        <div>
+          <div class="stat-value"><%= @sites_count %></div>
+          <div class="stat-label">現場（合計）</div>
+          <div class="stat-sub text-success fw-semibold">稼働中 <%= @active_sites_count %>件</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="stat-icon" style="background:#d1fae5;">🔍</div>
+        <div>
+          <div class="stat-value"><%= @inspections_count %></div>
+          <div class="stat-label">点検記録（合計）</div>
+          <% if @failed_inspections_count > 0 %>
+            <div class="stat-sub text-danger fw-semibold">不合格 <%= @failed_inspections_count %>件</div>
+          <% else %>
+            <div class="stat-sub text-success fw-semibold">不合格 0件</div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="stat-icon" style="background:#fef3c7;">🚗</div>
+        <div>
+          <div class="stat-value"><%= @business_trips_count %></div>
+          <div class="stat-label">出張報告（合計）</div>
+          <div class="stat-sub text-muted">全現場</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card stat-card">
+      <div class="card-body d-flex align-items-center gap-3">
+        <div class="stat-icon" style="background:#ede9fe;">📋</div>
+        <div>
+          <div class="stat-value"><%= Site.where(status: :active).count %></div>
+          <div class="stat-label">稼働中の現場</div>
+          <div class="stat-sub">
+            <%= link_to "一覧を見る →", sites_path, class: "text-primary-custom fw-semibold" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- 最近の点検記録 -->
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="section-title">🔍 最近の点検記録</span>
+      </div>
+      <% if @recent_inspections.any? %>
+        <div class="list-group list-group-flush activity-list">
+          <% @recent_inspections.each do |inspection| %>
+            <%= link_to site_inspection_path(inspection.site, inspection),
+                  class: "list-group-item list-group-item-action" do %>
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="overflow-hidden me-2">
+                  <div class="fw-semibold small text-truncate"><%= inspection.site.name %></div>
+                  <div class="text-muted small text-truncate"><%= inspection.result %></div>
+                </div>
+                <span class="badge badge-<%= inspection.status %> flex-shrink-0">
+                  <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+                </span>
+              </div>
+              <div class="text-muted mt-1" style="font-size:.75rem;">
+                <%= l inspection.inspected_at, format: :short %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <p>点検記録がありません</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 最近の出張報告 -->
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="section-title">🚗 最近の出張報告</span>
+      </div>
+      <% if @recent_business_trips.any? %>
+        <div class="list-group list-group-flush activity-list">
+          <% @recent_business_trips.each do |trip| %>
+            <%= link_to site_business_trip_path(trip.site, trip),
+                  class: "list-group-item list-group-item-action" do %>
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="overflow-hidden me-2">
+                  <div class="fw-semibold small text-truncate"><%= trip.site.name %></div>
+                  <div class="text-muted small text-truncate"><%= trip.destination %> — <%= trip.purpose %></div>
+                </div>
+                <span class="text-muted flex-shrink-0" style="font-size:.78rem;"><%= trip.user.name %></span>
+              </div>
+              <div class="text-muted mt-1" style="font-size:.75rem;">
+                <%= l trip.started_at %> 〜 <%= l trip.ended_at %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state">
+          <div class="empty-icon">🚗</div>
+          <p>出張報告がありません</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

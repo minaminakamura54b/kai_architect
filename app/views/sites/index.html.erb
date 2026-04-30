@@ -1,0 +1,56 @@
+<% content_for :title, "現場一覧" %>
+
+<div class="page-header">
+  <h1 class="page-title">現場一覧</h1>
+  <%= link_to "＋ 新規登録", new_site_path, class: "btn btn-accent" %>
+</div>
+
+<% if @sites.any? %>
+  <div class="row g-3">
+    <% @sites.each do |site| %>
+      <div class="col-md-6 col-lg-4">
+        <div class="card site-card" onclick="location.href='<%= site_path(site) %>'">
+          <div class="site-card-top <%= site.status %>"></div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="fw-bold mb-0" style="color:#1a3a5c; font-size:1rem;">
+                <%= site.name %>
+              </h5>
+              <span class="badge badge-site-<%= site.status %>">
+                <%= I18n.t("enums.site.status.#{site.status}", default: site.status) %>
+              </span>
+            </div>
+            <p class="text-muted small mb-3">
+              📍 <%= site.address %>
+            </p>
+            <% if site.description.present? %>
+              <p class="small text-secondary mb-3"><%= truncate(site.description, length: 55) %></p>
+            <% end %>
+            <div class="d-flex gap-3 text-muted" style="font-size:.8rem;">
+              <span>🔍 点検 <strong><%= site.inspections.count %></strong>件</span>
+              <span>🚗 出張 <strong><%= site.business_trips.count %></strong>件</span>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent border-top d-flex gap-2 py-2">
+            <%= link_to "詳細", site, class: "btn btn-sm btn-outline-primary flex-fill",
+                  onclick: "event.stopPropagation()" %>
+            <%= link_to "編集", edit_site_path(site), class: "btn btn-sm btn-outline-secondary",
+                  onclick: "event.stopPropagation()" %>
+            <%= link_to "削除", site,
+                  data: { turbo_method: :delete, confirm: "「#{site.name}」を削除しますか？" },
+                  class: "btn btn-sm btn-outline-danger",
+                  onclick: "event.stopPropagation()" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="empty-state">
+      <div class="empty-icon">🏗</div>
+      <p>現場がまだ登録されていません</p>
+      <%= link_to "最初の現場を登録する", new_site_path, class: "btn btn-accent" %>
+    </div>
+  </div>
+<% end %>

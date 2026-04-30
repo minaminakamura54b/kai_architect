@@ -1,0 +1,10 @@
+<% content_for :title, "点検記録 編集" %>
+<div class="mb-3 text-muted small">
+  <%= link_to "現場一覧", sites_path %> › <%= link_to @site.name, @site %> › <%= link_to "点検記録", site_inspections_path(@site) %> › 編集
+</div>
+<h1 class="h3 mb-4">点検記録 編集</h1>
+<div class="card shadow-sm" style="max-width: 640px;">
+  <div class="card-body p-4">
+    <%= render 'form' %>
+  </div>
+</div>

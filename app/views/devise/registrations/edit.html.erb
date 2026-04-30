@@ -1,0 +1,152 @@
+<% content_for :title, "プロフィール" %>
+
+<div class="page-header">
+  <h1 class="page-title">プロフィール</h1>
+</div>
+
+<div class="row g-4" style="max-width: 860px;">
+
+  <!-- プロフィール編集 -->
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">
+        <span class="section-title">👤 基本情報</span>
+      </div>
+      <div class="card-body p-4">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name),
+              html: { method: :put, id: "profile-form" }) do |f| %>
+          <input type="hidden" name="user[password]" value="">
+          <input type="hidden" name="user[password_confirmation]" value="">
+
+          <div class="mb-3">
+            <div class="d-flex align-items-center justify-content-center mb-4">
+              <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1a3a5c,#2a5298);
+                          display:flex;align-items:center;justify-content:center;
+                          font-size:1.8rem;font-weight:700;color:#fff;">
+                <%= current_user.name.first %>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :name, "氏名", class: "form-label fw-semibold" %>
+            <%= f.text_field :name,
+                  class: "form-control #{'is-invalid' if resource.errors[:name].any?}",
+                  placeholder: "山田 太郎" %>
+            <div class="invalid-feedback"><%= resource.errors[:name].first %></div>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :email, "メールアドレス", class: "form-label fw-semibold" %>
+            <%= f.email_field :email, autocomplete: "email",
+                  class: "form-control #{'is-invalid' if resource.errors[:email].any?}" %>
+            <div class="invalid-feedback"><%= resource.errors[:email].first %></div>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :current_password, "現在のパスワード（確認用）", class: "form-label fw-semibold" %>
+            <div class="form-text mb-1">変更を保存するために必要です</div>
+            <%= f.password_field :current_password, autocomplete: "current-password",
+                  class: "form-control #{'is-invalid' if resource.errors[:current_password].any?}" %>
+            <div class="invalid-feedback"><%= resource.errors[:current_password].first %></div>
+          </div>
+
+          <%= f.submit "プロフィールを更新", class: "btn btn-primary w-100" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- パスワード変更 -->
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">
+        <span class="section-title">🔒 パスワード変更</span>
+      </div>
+      <div class="card-body p-4">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name),
+              html: { method: :put, id: "password-form" }) do |f| %>
+          <input type="hidden" name="user[name]" value="<%= current_user.name %>">
+          <input type="hidden" name="user[email]" value="<%= current_user.email %>">
+
+          <div class="mb-1 p-3 rounded mb-3" style="background:#f0f4f8; font-size:.83rem; color:#475569;">
+            <strong>パスワードの要件：</strong>
+            <ul class="mb-0 mt-1 ps-3">
+              <li>8文字以上</li>
+              <li>大文字を1文字以上含む</li>
+              <li>数字を1文字以上含む</li>
+            </ul>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, "新しいパスワード", class: "form-label fw-semibold" %>
+            <%= f.password_field :password, autocomplete: "new-password", id: "new_password",
+                  class: "form-control #{'is-invalid' if resource.errors[:password].any?}" %>
+            <div class="invalid-feedback"><%= resource.errors[:password].first %></div>
+            <div id="password-strength" class="form-text mt-1"></div>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "form-label fw-semibold" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                  id: "new_password_confirmation",
+                  class: "form-control #{'is-invalid' if resource.errors[:password_confirmation].any?}" %>
+            <div class="invalid-feedback"><%= resource.errors[:password_confirmation].first %></div>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :current_password, "現在のパスワード", class: "form-label fw-semibold" %>
+            <div class="form-text mb-1">変更を確定するために必要です</div>
+            <%= f.password_field :current_password, autocomplete: "current-password",
+                  id: "current_password_for_pw",
+                  class: "form-control #{'is-invalid' if resource.errors[:current_password].any?}" %>
+            <div class="invalid-feedback"><%= resource.errors[:current_password].first %></div>
+          </div>
+
+          <%= f.submit "パスワードを変更", class: "btn btn-primary w-100" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- アカウント削除 -->
+  <div class="col-12">
+    <div class="card border-danger" style="border-color:#fee2e2 !important;">
+      <div class="card-body p-3 d-flex justify-content-between align-items-center">
+        <div>
+          <span class="fw-semibold text-danger">アカウントを削除</span>
+          <span class="text-muted small ms-2">一度削除すると元に戻せません</span>
+        </div>
+        <%= button_to "削除する", registration_path(resource_name),
+              method: :delete,
+              data: { confirm: "本当に削除しますか？この操作は取り消せません。" },
+              class: "btn btn-sm btn-outline-danger" %>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // パスワード強度インジケーター
+  document.getElementById('new_password')?.addEventListener('input', function() {
+    const pw = this.value;
+    const el = document.getElementById('password-strength');
+    if (!pw) { el.textContent = ''; return; }
+
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+    const levels = [
+      { label: '弱い', color: '#ef4444' },
+      { label: '普通', color: '#f59e0b' },
+      { label: '強い', color: '#10b981' },
+      { label: 'とても強い', color: '#059669' },
+    ];
+    const lv = levels[Math.max(0, score - 1)];
+    el.innerHTML = `<span style="color:${lv.color}; font-weight:600;">強度: ${lv.label}</span>`;
+  });
+</script>

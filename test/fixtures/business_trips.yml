@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  site: one
+  started_at: 2026-04-21
+  ended_at: 2026-04-21
+  destination: MyString
+  purpose: MyText
+  report: MyText
+  expenses: 9.99
+
+two:
+  user: two
+  site: two
+  started_at: 2026-04-21
+  ended_at: 2026-04-21
+  destination: MyString
+  purpose: MyText
+  report: MyText
+  expenses: 9.99

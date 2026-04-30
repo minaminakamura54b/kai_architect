@@ -1,0 +1,48 @@
+<% content_for :title, @site.new_record? ? "現場登録" : "現場編集" %>
+<div class="cm-page cm-page-narrow">
+  <div class="cm-breadcrumb">
+    <%= link_to "現場一覧", sites_path %>
+    <% unless @site.new_record? %>
+      <span>›</span> <%= link_to @site.name, @site %>
+    <% end %>
+    <span>›</span> <%= @site.new_record? ? "新規登録" : "編集" %>
+  </div>
+  <div class="cm-page-header">
+    <h1 class="cm-page-title"><%= @site.new_record? ? "🏗️ 現場登録" : "✏️ 現場編集" %></h1>
+  </div>
+  <%= form_with model: @site, class: "cm-form" do |f| %>
+    <% if @site.errors.any? %>
+      <div class="cm-alert cm-alert-error">
+        <strong><%= @site.errors.count %>件のエラーがあります：</strong>
+        <ul>
+          <% @site.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="cm-form-group">
+      <%= f.label :name, "現場名", class: "cm-label" %>
+      <%= f.text_field :name, class: "cm-input", placeholder: "例：○○ビル新築工事" %>
+    </div>
+    <div class="cm-form-group">
+      <%= f.label :address, "住所", class: "cm-label" %>
+      <%= f.text_field :address, class: "cm-input", placeholder: "例：東京都渋谷区..." %>
+    </div>
+    <div class="cm-form-group">
+      <%= f.label :status, "ステータス", class: "cm-label" %>
+      <%= f.select :status,
+            [["稼働中", "active"], ["完了", "completed"], ["停止中", "suspended"]],
+            {},
+            class: "cm-select" %>
+    </div>
+    <div class="cm-form-group">
+      <%= f.label :description, "備考・説明", class: "cm-label" %>
+      <%= f.text_area :description, class: "cm-textarea", rows: 4, placeholder: "現場の概要や注意事項など" %>
+    </div>
+    <div class="cm-form-actions">
+      <%= link_to "キャンセル", @site.new_record? ? sites_path : @site, class: "cm-btn cm-btn-outline" %>
+      <%= f.submit @site.new_record? ? "登録する" : "更新する", class: "cm-btn cm-btn-primary" %>
+    </div>
+  <% end %>
+</div>

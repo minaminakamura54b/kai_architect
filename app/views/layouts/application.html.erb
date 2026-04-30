@@ -1,29 +1,89 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Kai Architect" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Kai Architect">
-    <meta name="mobile-web-app-capable" content="yes">
+    <title><%= full_title(yield(:title)) %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%= yield %>
+    <nav class="navbar navbar-expand-lg navbar-main">
+      <div class="container">
+        <%= link_to root_path, class: "navbar-brand" do %>
+          <span class="brand-icon">🏗</span>
+          Kai Architect
+        <% end %>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto ms-3">
+            <% if user_signed_in? %>
+              <li class="nav-item">
+                <%= link_to "ダッシュボード", root_path,
+                      class: "nav-link #{'active' if current_page?(root_path)}" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "現場", sites_path,
+                      class: "nav-link #{'active' if request.path.start_with?('/sites')}" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "点検", all_inspections_path,
+                      class: "nav-link #{'active' if current_page?(all_inspections_path)}" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "出張", all_business_trips_path,
+                      class: "nav-link #{'active' if current_page?(all_business_trips_path)}" %>
+              </li>
+            <% end %>
+          </ul>
+
+          <ul class="navbar-nav align-items-center gap-2">
+            <% if user_signed_in? %>
+              <li class="nav-item">
+                <%= link_to edit_user_registration_path, class: "nav-user text-decoration-none" do %>
+                  <span class="avatar"><%= current_user.name.first %></span>
+                  <%= current_user.name %>
+                <% end %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "ログアウト", destroy_user_session_path, class: "btn-logout nav-link" %>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "ログイン", new_user_session_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "新規登録", new_user_registration_path, class: "nav-link" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page-wrapper">
+      <div class="container">
+        <% if notice %>
+          <div class="alert alert-success alert-dismissible mb-4" role="alert">
+            <span>✓</span> <%= notice %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        <% end %>
+        <% if alert %>
+          <div class="alert alert-danger alert-dismissible mb-4" role="alert">
+            <span>!</span> <%= alert %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        <% end %>
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>
