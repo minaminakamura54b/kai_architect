@@ -327,7 +327,7 @@ GEM
       psych (>= 4.0.0)
       tsort
     regexp_parser (2.12.0)
-    reline (0.5.10)
+    reline (0.6.3)
       io-console (~> 0.5)
     repl_type_completor (0.1.10)
       prism (~> 1.0)
@@ -483,7 +483,7 @@ DEPENDENCIES
   puma (= 5.6.8)
   rails (= 7.0.4.3)
   rails-controller-testing (= 1.0.5)
-  reline (= 0.5.10)
+  reline (= 0.6.3)
   repl_type_completor (= 0.1.10)
   resend (~> 0.12)
   sassc-rails (= 2.1.2)
@@ -629,7 +629,7 @@ CHECKSUMS
   rbs (3.6.1) sha256=ed7273d018556844583d1785ac54194e67eec594d68e317d57fa90ad035532c0
   rdoc (7.2.0) sha256=8650f76cd4009c3b54955eb5d7e3a075c60a57276766ebf36f9085e8c9f23192
   regexp_parser (2.12.0) sha256=35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb
-  reline (0.5.10) sha256=1660c969a792ebd034e6ceee8ca628f3b6698dcdb34f7a282a5edda37b958166
+  reline (0.6.3) sha256=1198b04973565b36ec0f11542ab3f5cfeeec34823f4e54cebde90968092b1835
   repl_type_completor (0.1.10) sha256=1fccf9b502a3d502daaa803748021839a110d13e383f4efbb6f9eff1ad041161
   resend (0.27.0) sha256=577f9e7849d3cd3ae2b14bcfd81574619d837a865efb5b2a4f001c4936fcf1ee
   responders (3.2.0) sha256=89c2d6ac0ae16f6458a11524cae4a8efdceba1a3baea164d28ee9046bd3df55a

@@ -25,7 +25,7 @@ gem "sqlite3",         "1.6.1"
 gem "concurrent-ruby", "1.3.4"
 
 group :development, :test do
-  gem 'reline', '0.5.10'
+  gem 'reline', '0.6.3'
   gem "debug",   "1.7.1", platforms: %i[ mri mingw x64_mingw ]
 end
 
