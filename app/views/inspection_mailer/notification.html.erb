@@ -54,6 +54,13 @@
         <div class="value" style="white-space:pre-line;"><%= @inspection.remarks %></div>
       <% end %>
     </div>
+    <div style="padding:0 32px 28px;">
+      <a href="<%= site_inspection_url(@site, @inspection) %>"
+         style="display:inline-block;background:linear-gradient(135deg,#1a3a5c,#2a5298);color:#fff;
+                text-decoration:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;">
+        点検記録を確認する →
+      </a>
+    </div>
     <div class="footer">
       このメールは Kai Architect から自動送信されています
     </div>

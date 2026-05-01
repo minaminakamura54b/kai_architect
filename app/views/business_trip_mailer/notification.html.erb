@@ -51,6 +51,13 @@
         <div class="value"><%= number_with_delimiter(@business_trip.expenses.to_i) %>円</div>
       <% end %>
     </div>
+    <div style="padding:0 32px 28px;">
+      <a href="<%= site_business_trip_url(@site, @business_trip) %>"
+         style="display:inline-block;background:linear-gradient(135deg,#1a3a5c,#2a5298);color:#fff;
+                text-decoration:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;">
+        出張報告を確認する →
+      </a>
+    </div>
     <div class="footer">
       このメールは Kai Architect から自動送信されています
     </div>
