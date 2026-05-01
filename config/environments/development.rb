@@ -45,15 +45,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   if ENV["RESEND_API_KEY"].present?
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-      port:           587,
-      address:        "smtp.resend.com",
-      user_name:      "resend",
-      password:       ENV["RESEND_API_KEY"],
-      authentication: :plain,
-      enable_starttls_auto: true
-    }
+    config.action_mailer.delivery_method = :resend
   else
     config.action_mailer.delivery_method = :letter_opener
   end

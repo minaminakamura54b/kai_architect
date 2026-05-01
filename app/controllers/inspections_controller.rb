@@ -24,8 +24,17 @@ class InspectionsController < ApplicationController
     @inspection.user = current_user
     if @inspection.save
       notify_email = params[:inspection][:notify_email].presence
-      InspectionMailer.notification(@inspection, notify_email).deliver_now if notify_email
-      redirect_to site_inspection_path(@site, @inspection), notice: "点検記録を作成しました#{notify_email ? "（#{notify_email} に通知を送信しました）" : ""}"
+      if notify_email
+        begin
+          InspectionMailer.notification(@inspection, notify_email).deliver_now
+          redirect_to site_inspection_path(@site, @inspection), notice: "点検記録を作成しました（#{notify_email} に通知を送信しました）"
+        rescue => e
+          Rails.logger.error "メール送信失敗: #{e.message}"
+          redirect_to site_inspection_path(@site, @inspection), alert: "点検記録は保存しましたが、メール送信に失敗しました。"
+        end
+      else
+        redirect_to site_inspection_path(@site, @inspection), notice: "点検記録を作成しました"
+      end
     else
       render :new, status: :unprocessable_entity
     end

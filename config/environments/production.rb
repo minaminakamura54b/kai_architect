@@ -93,19 +93,10 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method = :resend
 
   host = "nextstage-w5ps.onrender.com"
 
   config.action_mailer.default_url_options = { host: host }
-
-  config.action_mailer.smtp_settings = {
-    port:           587,
-    address:        "smtp.resend.com",
-    user_name:      "resend",
-    password:       ENV["RESEND_API_KEY"],
-    authentication: :plain,
-    enable_starttls_auto: true
-  }
 
 end

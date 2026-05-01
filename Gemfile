@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 
 gem 'devise', '~> 4.9'
+gem 'resend', '~> 0.12'
 ruby "3.2.9"
 gem 'image_processing'
 gem "active_storage_validations", "0.9.8"
