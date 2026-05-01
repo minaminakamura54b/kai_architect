@@ -27,7 +27,7 @@ class BusinessTripsController < ApplicationController
     @business_trip.user = current_user
     if @business_trip.save
       notify_email = params[:business_trip][:notify_email].presence
-      BusinessTripMailer.notification(@business_trip, notify_email).deliver_later if notify_email
+      BusinessTripMailer.notification(@business_trip, notify_email).deliver_now if notify_email
       redirect_to site_business_trip_path(@site, @business_trip), notice: "出張報告を作成しました#{notify_email ? "（#{notify_email} に通知を送信しました）" : ""}"
     else
       render :new, status: :unprocessable_entity

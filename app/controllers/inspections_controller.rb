@@ -24,7 +24,7 @@ class InspectionsController < ApplicationController
     @inspection.user = current_user
     if @inspection.save
       notify_email = params[:inspection][:notify_email].presence
-      InspectionMailer.notification(@inspection, notify_email).deliver_later if notify_email
+      InspectionMailer.notification(@inspection, notify_email).deliver_now if notify_email
       redirect_to site_inspection_path(@site, @inspection), notice: "点検記録を作成しました#{notify_email ? "（#{notify_email} に通知を送信しました）" : ""}"
     else
       render :new, status: :unprocessable_entity
