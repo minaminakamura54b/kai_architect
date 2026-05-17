@@ -1,0 +1,48 @@
+<% content_for :title, "新しいパスワードの設定" %>
+<div class="auth-page">
+  <div class="auth-card card">
+    <div class="auth-header">
+      <div class="auth-logo">🔒</div>
+      <h1>新しいパスワードの設定</h1>
+      <p>新しいパスワードを入力してください</p>
+    </div>
+    <div class="card-body">
+      <% if resource.errors.any? %>
+        <div class="alert alert-danger">
+          <% resource.errors.full_messages.each do |msg| %>
+            <div><%= msg %></div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+        <%= f.hidden_field :reset_password_token %>
+
+        <div class="mb-1 p-3 rounded mb-3" style="background:#f0f4f8; font-size:.83rem; color:#475569;">
+          <strong>パスワードの要件：</strong>
+          <ul class="mb-0 mt-1 ps-3">
+            <li>8文字以上</li>
+            <li>大文字を1文字以上含む</li>
+            <li>数字を1文字以上含む</li>
+          </ul>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, "新しいパスワード", class: "form-label fw-semibold" %>
+          <%= f.password_field :password, autofocus: true, autocomplete: "new-password",
+                class: "form-control #{'is-invalid' if resource.errors[:password].any?}" %>
+          <div class="invalid-feedback"><%= resource.errors[:password].first %></div>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "form-label fw-semibold" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                class: "form-control #{'is-invalid' if resource.errors[:password_confirmation].any?}" %>
+          <div class="invalid-feedback"><%= resource.errors[:password_confirmation].first %></div>
+        </div>
+
+        <%= f.submit "パスワードを変更する", class: "btn btn-primary w-100" %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -16,8 +16,8 @@
   </div>
   <div class="d-flex gap-2">
     <%= link_to "編集", edit_site_path(@site), class: "btn btn-outline-secondary btn-sm" %>
-    <%= link_to "削除", @site,
-          data: { turbo_method: :delete, confirm: "「#{@site.name}」を削除しますか？" },
+    <%= button_to "削除", @site, method: :delete,
+          data: { turbo_confirm: "「#{@site.name}」を削除しますか？" },
           class: "btn btn-outline-danger btn-sm" %>
   </div>
 </div>

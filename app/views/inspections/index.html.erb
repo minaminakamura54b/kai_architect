@@ -41,8 +41,8 @@
             <td class="text-end text-nowrap">
               <%= link_to "詳細", site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-primary me-1" %>
               <%= link_to "編集", edit_site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-secondary me-1" %>
-              <%= link_to "削除", site_inspection_path(@site, inspection),
-                    data: { turbo_method: :delete, confirm: "削除しますか？" },
+              <%= button_to "削除", site_inspection_path(@site, inspection), method: :delete,
+                    data: { turbo_confirm: "削除しますか？" },
                     class: "btn btn-sm btn-outline-danger" %>
             </td>
           </tr>

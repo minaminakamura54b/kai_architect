@@ -36,10 +36,10 @@
                   onclick: "event.stopPropagation()" %>
             <%= link_to "編集", edit_site_path(site), class: "btn btn-sm btn-outline-secondary",
                   onclick: "event.stopPropagation()" %>
-            <%= link_to "削除", site,
-                  data: { turbo_method: :delete, confirm: "「#{site.name}」を削除しますか？" },
-                  class: "btn btn-sm btn-outline-danger",
-                  onclick: "event.stopPropagation()" %>
+            <%= button_to "削除", site, method: :delete,
+                  data: { turbo_confirm: "「#{site.name}」を削除しますか？" },
+                  onclick: "event.stopPropagation()",
+                  class: "btn btn-sm btn-outline-danger" %>
           </div>
         </div>
       </div>

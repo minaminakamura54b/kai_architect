@@ -6,8 +6,8 @@
   <h1 class="h3 mb-0">点検記録詳細</h1>
   <div class="d-flex gap-2">
     <%= link_to "編集", edit_site_inspection_path(@inspection.site, @inspection), class: "btn btn-sm btn-outline-secondary" %>
-    <%= link_to "削除", site_inspection_path(@inspection.site, @inspection),
-          data: { turbo_method: :delete, confirm: "削除しますか？" },
+    <%= button_to "削除", site_inspection_path(@inspection.site, @inspection), method: :delete,
+          data: { turbo_confirm: "削除しますか？" },
           class: "btn btn-sm btn-outline-danger" %>
   </div>
 </div>
