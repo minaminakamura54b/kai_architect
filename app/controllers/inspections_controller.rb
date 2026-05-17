@@ -2,6 +2,7 @@ class InspectionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_site, except: [:all, :select_site]
   before_action :set_inspection, only: [:show, :edit, :update, :destroy]
+  before_action :set_users, only: [:new, :edit, :create]
 
   def all
     @inspections = Inspection.includes(:site, :user).order(inspected_at: :desc)
@@ -67,6 +68,10 @@ class InspectionsController < ApplicationController
 
   def set_inspection
     @inspection = @site.inspections.find(params[:id])
+  end
+
+  def set_users
+    @users = User.order(:name)
   end
 
   def inspection_params

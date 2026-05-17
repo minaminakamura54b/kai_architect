@@ -38,9 +38,14 @@
       <label class="form-label small text-muted mb-1">通知先メールアドレス</label>
       <%= text_field_tag "inspection[notify_email]", nil,
             class: "form-control",
-            placeholder: "例：manager@example.com",
-            type: "email" %>
-      <div class="form-text">入力すると、登録完了後に指定のアドレスへ通知メールを送信します</div>
+            placeholder: "名前またはメールアドレスを入力",
+            list: "user_email_list" %>
+      <datalist id="user_email_list">
+        <% @users.each do |user| %>
+          <option value="<%= user.email %>"><%= user.name %></option>
+        <% end %>
+      </datalist>
+      <div class="form-text">ユーザー名で絞り込めます。登録完了後に通知メールを送信します</div>
     </div>
   <% end %>
 

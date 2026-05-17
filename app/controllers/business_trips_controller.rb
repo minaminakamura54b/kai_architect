@@ -2,6 +2,7 @@ class BusinessTripsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_site, except: [:all, :select_site]
   before_action :set_business_trip, only: [:show, :edit, :update, :destroy]
+  before_action :set_users, only: [:new, :edit, :create]
 
   def all
     @business_trips = BusinessTrip.includes(:site, :user).order(started_at: :desc)
@@ -67,6 +68,10 @@ class BusinessTripsController < ApplicationController
 
   def set_business_trip
     @business_trip = @site.business_trips.find(params[:id])
+  end
+
+  def set_users
+    @users = User.order(:name)
   end
 
   def business_trip_params
