@@ -24,11 +24,11 @@ class InspectionsController < ApplicationController
     @inspection = @site.inspections.build(inspection_params)
     @inspection.user = current_user
     if @inspection.save
-      notify_email = params[:inspection][:notify_email].presence
-      if notify_email
+      notify_emails = Array(params[:inspection][:notify_emails]).reject(&:blank?)
+      if notify_emails.any?
         begin
-          InspectionMailer.notification(@inspection, notify_email).deliver_now
-          redirect_to site_inspection_path(@site, @inspection), notice: "点検記録を作成しました（#{notify_email} に通知を送信しました）"
+          InspectionMailer.notification(@inspection, notify_emails).deliver_now
+          redirect_to site_inspection_path(@site, @inspection), notice: "点検記録を作成しました（#{notify_emails.join(", ")} に通知を送信しました）"
         rescue => e
           Rails.logger.error "メール送信失敗: #{e.message}"
           redirect_to site_inspection_path(@site, @inspection), alert: "点検記録は保存しましたが、メール送信に失敗しました。"

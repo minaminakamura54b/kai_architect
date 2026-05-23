@@ -27,11 +27,11 @@ class BusinessTripsController < ApplicationController
     @business_trip = @site.business_trips.build(business_trip_params)
     @business_trip.user = current_user
     if @business_trip.save
-      notify_email = params[:business_trip][:notify_email].presence
-      if notify_email
+      notify_emails = Array(params[:business_trip][:notify_emails]).reject(&:blank?)
+      if notify_emails.any?
         begin
-          BusinessTripMailer.notification(@business_trip, notify_email).deliver_now
-          redirect_to site_business_trip_path(@site, @business_trip), notice: "出張報告を作成しました（#{notify_email} に通知を送信しました）"
+          BusinessTripMailer.notification(@business_trip, notify_emails).deliver_now
+          redirect_to site_business_trip_path(@site, @business_trip), notice: "出張報告を作成しました（#{notify_emails.join(", ")} に通知を送信しました）"
         rescue => e
           Rails.logger.error "メール送信失敗: #{e.message}"
           redirect_to site_business_trip_path(@site, @business_trip), alert: "出張報告は保存しましたが、メール送信に失敗しました。"

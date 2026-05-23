@@ -47,17 +47,20 @@
         <span style="font-size:1.1rem;">📧</span>
         <span class="fw-semibold" style="font-size:.9rem;">メール通知（任意）</span>
       </div>
-      <label class="form-label small text-muted mb-1">通知先メールアドレス</label>
-      <%= text_field_tag "business_trip[notify_email]", nil,
-            class: "form-control",
-            placeholder: "名前またはメールアドレスを入力",
-            list: "user_email_list" %>
-      <datalist id="user_email_list">
+      <label class="form-label small text-muted mb-1">通知先（複数選択可）</label>
+      <div class="d-flex flex-column gap-1 mb-2">
         <% @users.each do |user| %>
-          <option value="<%= user.email %>"><%= user.name %></option>
+          <div class="form-check">
+            <%= check_box_tag "business_trip[notify_emails][]", user.email, false,
+                  id: "business_trip_notify_#{user.id}",
+                  class: "form-check-input" %>
+            <label class="form-check-label small" for="business_trip_notify_<%= user.id %>">
+              <%= user.name %> <span class="text-muted">（<%= user.email %>）</span>
+            </label>
+          </div>
         <% end %>
-      </datalist>
-      <div class="form-text">ユーザー名で絞り込めます。登録完了後に通知メールを送信します</div>
+      </div>
+      <div class="form-text">チェックしたユーザーに登録完了の通知メールを送信します</div>
     </div>
   <% end %>
 
