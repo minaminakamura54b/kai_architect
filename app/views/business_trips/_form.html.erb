@@ -64,16 +64,27 @@
     </div>
   <% end %>
 
-  <%# ファイル添付 %>
+  <%# ファイル添付（写真とPDFを別々に選べるよう分割） %>
   <div class="mb-3">
-    <%= f.label :files, "ファイル添付", class: "form-label fw-semibold" %>
-    <%= f.file_field :files, multiple: true,
-          accept: "image/jpeg,image/png,image/gif,image/webp,application/pdf",
-          class: "form-control #{'is-invalid' if @business_trip.errors[:files].any?}" %>
+    <span class="form-label fw-semibold d-block mb-2">ファイル添付</span>
+
+    <div class="mb-2">
+      <label for="business_trip_files_images" class="form-label small text-muted mb-1">📷 写真・画像</label>
+      <%= f.file_field :files, multiple: true, accept: "image/*",
+            id: "business_trip_files_images",
+            class: "form-control #{'is-invalid' if @business_trip.errors[:files].any?}" %>
+    </div>
+    <div class="mb-2">
+      <label for="business_trip_files_pdfs" class="form-label small text-muted mb-1">📄 PDF・書類</label>
+      <%= f.file_field :files, multiple: true, accept: "application/pdf",
+            id: "business_trip_files_pdfs",
+            class: "form-control #{'is-invalid' if @business_trip.errors[:files].any?}" %>
+    </div>
+
     <% if @business_trip.errors[:files].any? %>
-      <div class="invalid-feedback d-block"><%= @business_trip.errors[:files].join("、") %></div>
+      <div class="text-danger small mt-1"><%= @business_trip.errors[:files].join("、") %></div>
     <% end %>
-    <div class="form-text">最大10個・1ファイル20MB以内・JPEG・PNG・GIF・WebP・PDFのみ可</div>
+    <div class="form-text">合計10個まで・1ファイル20MB以内・JPEG・PNG・GIF・WebP・PDFのみ可</div>
   </div>
 
   <% if @business_trip.new_record? %>

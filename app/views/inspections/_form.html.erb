@@ -52,16 +52,27 @@
     </div>
   <% end %>
 
-  <%# ファイル添付 %>
+  <%# ファイル添付（写真とPDFを別々に選べるよう分割） %>
   <div class="mb-3">
-    <%= f.label :files, "ファイル添付", class: "form-label fw-semibold" %>
-    <%= f.file_field :files, multiple: true,
-          accept: "image/*,application/pdf",
-          class: "form-control #{'is-invalid' if @inspection.errors[:files].any?}" %>
+    <span class="form-label fw-semibold d-block mb-2">ファイル添付</span>
+
+    <div class="mb-2">
+      <label for="inspection_files_images" class="form-label small text-muted mb-1">📷 写真・画像</label>
+      <%= f.file_field :files, multiple: true, accept: "image/*",
+            id: "inspection_files_images",
+            class: "form-control #{'is-invalid' if @inspection.errors[:files].any?}" %>
+    </div>
+    <div class="mb-2">
+      <label for="inspection_files_pdfs" class="form-label small text-muted mb-1">📄 PDF・書類</label>
+      <%= f.file_field :files, multiple: true, accept: "application/pdf",
+            id: "inspection_files_pdfs",
+            class: "form-control #{'is-invalid' if @inspection.errors[:files].any?}" %>
+    </div>
+
     <% if @inspection.errors[:files].any? %>
-      <div class="invalid-feedback d-block"><%= @inspection.errors[:files].join("、") %></div>
+      <div class="text-danger small mt-1"><%= @inspection.errors[:files].join("、") %></div>
     <% end %>
-    <div class="form-text">最大10個・1ファイル20MB以内・JPEG・PNG・GIF・WebP・PDFのみ可</div>
+    <div class="form-text">合計10個まで・1ファイル20MB以内・JPEG・PNG・GIF・WebP・PDFのみ可</div>
   </div>
 
   <% if @inspection.new_record? %>
