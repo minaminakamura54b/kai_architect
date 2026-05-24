@@ -69,7 +69,6 @@
     <%= f.label :files, "ファイル添付", class: "form-label fw-semibold" %>
     <%= f.file_field :files, multiple: true,
           accept: "image/jpeg,image/png,image/gif,image/webp,application/pdf",
-          capture: "environment",
           class: "form-control #{'is-invalid' if @business_trip.errors[:files].any?}" %>
     <% if @business_trip.errors[:files].any? %>
       <div class="invalid-feedback d-block"><%= @business_trip.errors[:files].join("、") %></div>
