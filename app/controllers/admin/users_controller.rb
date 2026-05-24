@@ -1,6 +1,6 @@
 module Admin
   class UsersController < BaseController
-    before_action :set_user, only: [:show, :edit, :update]
+    before_action :set_user, only: [:show, :edit, :update, :destroy]
 
     def index
       @users = User.order(:name)
@@ -18,6 +18,15 @@ module Admin
       else
         render :edit, status: :unprocessable_entity
       end
+    end
+
+    def destroy
+      if @user == current_user
+        redirect_to admin_users_path, alert: "自分自身は削除できません"
+        return
+      end
+      @user.destroy
+      redirect_to admin_users_path, notice: "#{@user.name} を削除しました"
     end
 
     private

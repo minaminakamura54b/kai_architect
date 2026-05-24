@@ -29,8 +29,11 @@
                 <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
               </span>
             </td>
-            <td class="text-end">
-              <%= link_to "詳細", admin_inspection_path(inspection), class: "btn btn-sm btn-outline-primary" %>
+            <td class="text-end text-nowrap">
+              <%= link_to "詳細", admin_inspection_path(inspection), class: "btn btn-sm btn-outline-primary me-1" %>
+              <%= button_to "削除", admin_inspection_path(inspection), method: :delete,
+                    data: { turbo_confirm: "この日報を削除しますか？" },
+                    class: "btn btn-sm btn-outline-danger" %>
             </td>
           </tr>
         <% end %>
@@ -40,7 +43,7 @@
 
   <div class="card d-block d-md-none">
     <% @inspections.each do |inspection| %>
-      <%= link_to admin_inspection_path(inspection), class: "mobile-list-item text-decoration-none" do %>
+      <div class="mobile-list-item">
         <div style="flex:1; min-width:0;">
           <div class="d-flex align-items-center gap-2 mb-1">
             <span class="badge-<%= inspection.status %> flex-shrink-0">
@@ -51,8 +54,15 @@
           <div class="fw-semibold text-truncate" style="font-size:.9rem; color:#1a3a5c;"><%= inspection.site.name %></div>
           <div class="text-truncate mt-1" style="font-size:.83rem; color:#475569;"><%= truncate(inspection.result, length: 55) %></div>
           <div class="mt-1" style="font-size:.77rem; color:#94a3b8;"><%= inspection.user.name %></div>
+          <div class="d-flex gap-2 mt-3">
+            <%= link_to "詳細", admin_inspection_path(inspection), class: "btn btn-sm btn-outline-primary" %>
+            <%= button_to "削除", admin_inspection_path(inspection), method: :delete,
+                  data: { turbo_confirm: "この日報を削除しますか？" },
+                  class: "btn btn-sm btn-outline-danger",
+                  form: { class: "flex-fill" } %>
+          </div>
         </div>
-      <% end %>
+      </div>
     <% end %>
   </div>
 
