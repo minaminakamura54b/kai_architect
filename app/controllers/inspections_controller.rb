@@ -6,6 +6,7 @@ class InspectionsController < ApplicationController
 
   def all
     @inspections = Inspection.includes(:site, :user).order(inspected_at: :desc)
+                              .paginate(page: params[:page], per_page: 15)
   end
 
   def select_site
@@ -13,7 +14,8 @@ class InspectionsController < ApplicationController
   end
 
   def index
-    @inspections = @site.inspections.order(inspected_at: :desc)
+    @inspections = @site.inspections.includes(:user).order(inspected_at: :desc)
+                        .paginate(page: params[:page], per_page: 15)
   end
 
   def new

@@ -1,11 +1,11 @@
-<% content_for :title, "点検を記録 — 現場を選択" %>
+<% content_for :title, "日報を記録 — 現場を選択" %>
 
 <div class="mb-3 text-muted small">
-  <%= link_to "← 点検記録一覧", all_inspections_path, class: "text-decoration-none" %>
+  <%= link_to "← 日報一覧", all_inspections_path, class: "text-decoration-none" %>
 </div>
 
 <div class="page-header">
-  <h1 class="page-title">どの現場の点検ですか？</h1>
+  <h1 class="page-title">どの案件/議題の日報ですか？</h1>
 </div>
 
 <% if @sites.any? %>

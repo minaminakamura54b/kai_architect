@@ -3,7 +3,7 @@ class Inspection < ApplicationRecord
   belongs_to :site
   belongs_to :user
 
-  enum status: { pending: 0, passed: 1, failed: 2 }
+  enum status: { not_started: 0, in_progress: 1, completed: 2 }
 
   validates :inspected_at, presence: true
   validates :result, presence: true

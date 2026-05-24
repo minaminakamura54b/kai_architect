@@ -6,7 +6,8 @@
 </div>
 
 <% if @business_trips.any? %>
-  <div class="table-card">
+  <%# デスクトップ: テーブル表示 %>
+  <div class="table-card d-none d-md-block">
     <table class="table">
       <thead>
         <tr>
@@ -22,19 +23,46 @@
       <tbody>
         <% @business_trips.each do |trip| %>
           <tr>
-            <td class="text-nowrap fw-semibold"><%= l trip.started_at %> 〜 <%= l trip.ended_at %></td>
-            <td><%= link_to trip.site.name, trip.site, class: "text-primary-custom fw-semibold" %></td>
-            <td><%= trip.user.name %></td>
-            <td><%= trip.destination %></td>
-            <td><%= truncate(trip.purpose, length: 30) %></td>
-            <td><%= trip.expenses ? "#{number_with_delimiter(trip.expenses.to_i)}円" : "—" %></td>
-            <td class="text-end">
+            <td class="text-nowrap fw-semibold"><%= l trip.started_at, format: :short %> 〜 <%= l trip.ended_at, format: :short %></td>
+            <td class="td-truncate-sm"><%= link_to trip.site.name, trip.site, class: "text-primary-custom fw-semibold" %></td>
+            <td class="text-nowrap"><%= trip.user.name %></td>
+            <td class="td-truncate-sm"><%= trip.destination %></td>
+            <td class="td-truncate"><%= trip.purpose %></td>
+            <td class="text-nowrap"><%= trip.expenses ? "#{number_with_delimiter(trip.expenses.to_i)}円" : "—" %></td>
+            <td class="text-end text-nowrap">
               <%= link_to "詳細", site_business_trip_path(trip.site, trip), class: "btn btn-sm btn-outline-primary" %>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
+  </div>
+
+  <%# モバイル: カード形式 %>
+  <div class="card d-block d-md-none">
+    <% @business_trips.each do |trip| %>
+      <%= link_to site_business_trip_path(trip.site, trip), class: "mobile-list-item text-decoration-none" do %>
+        <div style="flex:1; min-width:0;">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="fw-semibold text-truncate" style="font-size:.9rem; color:#1a3a5c;"><%= trip.site.name %></span>
+            <span class="text-muted flex-shrink-0 ms-2" style="font-size:.78rem;">
+              <%= l trip.started_at, format: :short %> 〜 <%= l trip.ended_at, format: :short %>
+            </span>
+          </div>
+          <div class="text-truncate" style="font-size:.83rem; color:#475569;"><%= trip.destination %> ― <%= truncate(trip.purpose, length: 40) %></div>
+          <div class="d-flex gap-3 mt-1" style="font-size:.77rem; color:#94a3b8;">
+            <span><%= trip.user.name %></span>
+            <% if trip.expenses.present? && trip.expenses > 0 %>
+              <span><%= number_with_delimiter(trip.expenses.to_i) %>円</span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="pagination-wrapper">
+    <%= will_paginate @business_trips %>
   </div>
 <% else %>
   <div class="card">

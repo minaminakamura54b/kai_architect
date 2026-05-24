@@ -1,18 +1,19 @@
-<% content_for :title, "点検記録" %>
+<% content_for :title, "日報" %>
 
 <div class="page-header">
-  <h1 class="page-title">点検記録</h1>
-  <%= link_to "＋ 点検を記録", new_inspection_path, class: "btn btn-accent" %>
+  <h1 class="page-title">日報</h1>
+  <%= link_to "＋ 日報を記録", new_inspection_path, class: "btn btn-accent" %>
 </div>
 
 <% if @inspections.any? %>
-  <div class="table-card">
+  <%# デスクトップ: テーブル表示 %>
+  <div class="table-card d-none d-md-block">
     <table class="table">
       <thead>
         <tr>
-          <th>点検日時</th>
-          <th>現場</th>
-          <th>担当者</th>
+          <th>報告日時</th>
+          <th>案件名/議題</th>
+          <th>発信者</th>
           <th>結果概要</th>
           <th>ステータス</th>
           <th></th>
@@ -22,15 +23,15 @@
         <% @inspections.each do |inspection| %>
           <tr>
             <td class="text-nowrap fw-semibold"><%= l inspection.inspected_at, format: :short %></td>
-            <td><%= link_to inspection.site.name, inspection.site, class: "text-primary-custom fw-semibold" %></td>
-            <td><%= inspection.user.name %></td>
-            <td><%= truncate(inspection.result, length: 40) %></td>
-            <td>
-              <span class="badge badge-<%= inspection.status %>">
+            <td class="td-truncate-sm"><%= link_to inspection.site.name, inspection.site, class: "text-primary-custom fw-semibold" %></td>
+            <td class="text-nowrap"><%= inspection.user.name %></td>
+            <td class="td-truncate"><%= inspection.result %></td>
+            <td class="text-nowrap">
+              <span class="badge-<%= inspection.status %>">
                 <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
               </span>
             </td>
-            <td class="text-end">
+            <td class="text-end text-nowrap">
               <%= link_to "詳細", site_inspection_path(inspection.site, inspection), class: "btn btn-sm btn-outline-primary" %>
             </td>
           </tr>
@@ -38,12 +39,37 @@
       </tbody>
     </table>
   </div>
+
+  <%# モバイル: カード形式 %>
+  <div class="card d-block d-md-none">
+    <% @inspections.each do |inspection| %>
+      <%= link_to site_inspection_path(inspection.site, inspection), class: "mobile-list-item text-decoration-none" do %>
+        <div class="d-flex justify-content-between align-items-start gap-2">
+          <div style="flex:1; min-width:0;">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="badge-<%= inspection.status %>">
+                <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+              </span>
+              <span class="text-muted" style="font-size:.78rem;"><%= l inspection.inspected_at, format: :short %></span>
+            </div>
+            <div class="fw-semibold text-truncate" style="font-size:.9rem; color:#1a3a5c;"><%= inspection.site.name %></div>
+            <div class="text-truncate mt-1" style="font-size:.83rem; color:#475569;"><%= truncate(inspection.result, length: 55) %></div>
+            <div class="mt-1" style="font-size:.77rem; color:#94a3b8;"><%= inspection.user.name %></div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="pagination-wrapper">
+    <%= will_paginate @inspections %>
+  </div>
 <% else %>
   <div class="card">
     <div class="empty-state">
       <div class="empty-icon">🔍</div>
-      <p>点検記録がありません</p>
-      <%= link_to "最初の点検を記録する", new_inspection_path, class: "btn btn-accent" %>
+      <p>日報がありません</p>
+      <%= link_to "最初の日報を記録する", new_inspection_path, class: "btn btn-accent" %>
     </div>
   </div>
 <% end %>

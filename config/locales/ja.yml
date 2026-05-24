@@ -21,13 +21,19 @@ ja:
         suspended: 停止中
     inspection:
       status:
-        pending: 確認待ち
-        passed: 合格
-        failed: 不合格
+        not_started: 未着手
+        in_progress: 継続中
+        completed: 完了
   activerecord:
+    errors:
+      messages:
+        record_invalid: "バリデーションに失敗しました: %{errors}"
+        blank: "を入力してください"
+        taken: "はすでに使用されています"
+        too_short: "は%{count}文字以上で入力してください"
     models:
       site: 現場
-      inspection: 点検記録
+      inspection: 日報
       business_trip: 出張報告
       user: ユーザー
     attributes:
@@ -37,9 +43,9 @@ ja:
         status: ステータス
         description: 備考
       inspection:
-        inspected_at: 点検日時
+        inspected_at: 報告日時
         status: ステータス
-        result: 点検結果
+        result: 報告内容
         remarks: 備考
       business_trip:
         started_at: 出発日

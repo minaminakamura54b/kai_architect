@@ -6,7 +6,7 @@ class InspectionMailer < ApplicationMailer
 
     mail(
       to: Array(recipient_emails),
-      subject: "【点検記録】#{@site.name} の点検が記録されました"
+      subject: "【日報】#{@site.name} の日報が作成されました"
     )
   end
 end

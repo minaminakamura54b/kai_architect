@@ -1,13 +1,14 @@
 require "test_helper"
 
 class StaticPagesControllerTest < ActionDispatch::IntegrationTest
-  test "should get home" do
-    get static_pages_home_url
-    assert_response :success
+  test "redirects to login when not authenticated" do
+    get root_url
+    assert_redirected_to new_user_session_path
   end
 
-  test "should get news" do
-    get static_pages_news_url
+  test "home renders dashboard when logged in" do
+    sign_in users(:one)
+    get root_url
     assert_response :success
   end
 end

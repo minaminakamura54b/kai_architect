@@ -5,7 +5,7 @@ class StaticPagesController < ApplicationController
     @sites_count = Site.count
     @active_sites_count = Site.where(status: :active).count
     @inspections_count = Inspection.count
-    @failed_inspections_count = Inspection.where(status: :failed).count
+    @failed_inspections_count = Inspection.where(status: :not_started).count
     @business_trips_count = BusinessTrip.count
     @recent_inspections = Inspection.includes(:site, :user).order(inspected_at: :desc).limit(5)
     @recent_business_trips = BusinessTrip.includes(:site, :user).order(started_at: :desc).limit(5)

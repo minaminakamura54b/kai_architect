@@ -1,7 +1,7 @@
 <%= form_with model: [@site, @inspection] do |f| %>
   <div class="row g-3 mb-3">
     <div class="col-md-6">
-      <%= f.label :inspected_at, "点検日時", class: "form-label fw-semibold" %>
+      <%= f.label :inspected_at, "報告日時", class: "form-label fw-semibold" %>
       <%= f.datetime_local_field :inspected_at,
             class: "form-control #{'is-invalid' if @inspection.errors[:inspected_at].any?}" %>
       <div class="invalid-feedback"><%= @inspection.errors[:inspected_at].first %></div>
@@ -9,14 +9,14 @@
     <div class="col-md-6">
       <%= f.label :status, "ステータス", class: "form-label fw-semibold" %>
       <%= f.select :status,
-            [["確認待ち", "pending"], ["合格", "passed"], ["不合格", "failed"]],
+            [["未着手", "not_started"], ["継続中", "in_progress"], ["完了", "completed"]],
             {},
             class: "form-select" %>
     </div>
   </div>
 
   <div class="mb-3">
-    <%= f.label :result, "点検結果", class: "form-label fw-semibold" %>
+    <%= f.label :result, "報告内容", class: "form-label fw-semibold" %>
     <%= f.text_area :result,
           class: "form-control #{'is-invalid' if @inspection.errors[:result].any?}",
           rows: 5, placeholder: "点検内容・確認事項・問題点などを記入してください" %>
@@ -35,20 +35,26 @@
         <span style="font-size:1.1rem;">📧</span>
         <span class="fw-semibold" style="font-size:.9rem;">メール通知（任意）</span>
       </div>
-      <label class="form-label small text-muted mb-1">通知先（複数選択可）</label>
-      <div class="d-flex flex-column gap-1 mb-2">
+      <label class="form-label small text-muted mb-1">登録ユーザーから選択</label>
+      <div class="d-flex flex-column gap-2 mb-3">
         <% @users.each do |user| %>
-          <div class="form-check">
+          <div class="form-check notify-check-item">
             <%= check_box_tag "inspection[notify_emails][]", user.email, false,
                   id: "inspection_notify_#{user.id}",
                   class: "form-check-input" %>
-            <label class="form-check-label small" for="inspection_notify_<%= user.id %>">
-              <%= user.name %> <span class="text-muted">（<%= user.email %>）</span>
+            <label class="form-check-label" for="inspection_notify_<%= user.id %>">
+              <span class="fw-semibold"><%= user.name %></span>
+              <span class="text-muted small ms-1"><%= user.email %></span>
             </label>
           </div>
         <% end %>
       </div>
-      <div class="form-text">チェックしたユーザーに登録完了の通知メールを送信します</div>
+      <label class="form-label small text-muted mb-1">その他（メールアドレスを直接入力）</label>
+      <%= text_field_tag "inspection[notify_emails][]", nil,
+            class: "form-control",
+            placeholder: "例：manager@example.com",
+            type: "email" %>
+      <div class="form-text mt-1">チェック・入力したアドレスに通知メールを送信します</div>
     </div>
   <% end %>
 

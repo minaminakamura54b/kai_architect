@@ -184,6 +184,15 @@ a { text-decoration: none; }
 }
 
 // stat cards on dashboard
+.stat-card-link {
+  cursor: pointer;
+  transition: box-shadow .2s, transform .15s;
+  &:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,.13);
+    transform: translateY(-2px);
+  }
+}
+
 .stat-card {
   border-radius: $card-border-radius;
   border: none;
@@ -299,9 +308,18 @@ a { text-decoration: none; }
 .badge-site-completed { background: #e2e8f0; color: #475569; }
 .badge-site-suspended { background: #fef3c7; color: #92400e; }
 
-.badge-passed  { background: #d1fae5; color: #065f46; }
-.badge-failed  { background: #fee2e2; color: #991b1b; }
-.badge-pending { background: #fef3c7; color: #92400e; }
+.badge-completed, .badge-in_progress, .badge-not_started {
+  display: inline-block;
+  padding: .3em .65em;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 6px;
+  color: #000;
+}
+.badge-completed   { background: #4ade80; }
+.badge-in_progress { background: #60a5fa; }
+.badge-not_started { background: #fbbf24; }
 
 // ============================================================
 //  Forms
@@ -444,6 +462,128 @@ a { text-decoration: none; }
 }
 
 // ============================================================
+//  Table cell truncation (desktop)
+// ============================================================
+.td-truncate {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.td-truncate-sm {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ============================================================
+//  Pagination (mobile-first)
+// ============================================================
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  margin-bottom: .5rem;
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0;
+
+    .page-item {
+      list-style: none;
+
+      .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        padding: .45rem .75rem;
+        font-size: .88rem;
+        font-weight: 500;
+        color: $primary;
+        background: #fff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px !important;
+        text-decoration: none;
+        transition: background .15s, border-color .15s;
+
+        &:hover {
+          background: #f0f4f8;
+          border-color: $primary-light;
+          color: $primary-light;
+        }
+      }
+
+      &.active .page-link {
+        background: $primary;
+        border-color: $primary;
+        color: #fff !important;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(26,58,92,.25);
+      }
+
+      &.disabled .page-link {
+        color: #cbd5e1 !important;
+        background: #f8fafc;
+        border-color: #f1f5f9;
+        pointer-events: none;
+        cursor: default;
+      }
+    }
+  }
+}
+
+// ============================================================
+//  Mobile card list (replaces table on small screens)
+// ============================================================
+
+// 親カードを透明にして各アイテムを独立カードとして見せる
+.card:has(> .mobile-list-item),
+.card:has(> a.mobile-list-item) {
+  background: transparent;
+  box-shadow: none;
+  padding: .25rem 0;
+}
+
+.mobile-list-item {
+  display: block;
+  padding: 1rem 1.05rem;
+  border-radius: 12px;
+  background: #fff;
+  margin-bottom: .55rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.07), 0 0 0 1px rgba(0,0,0,.04);
+  color: inherit;
+  transition: box-shadow .15s, transform .1s;
+  position: relative;
+
+  &:last-child { margin-bottom: 0; }
+  &:active {
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    transform: scale(.99);
+  }
+
+  // リンク要素のとき右矢印を表示
+  a& { padding-right: 2.25rem; }
+  a&::after {
+    content: '›';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.35rem;
+    color: #c0ccd8;
+    line-height: 1;
+  }
+}
+
+// ============================================================
 //  Misc
 // ============================================================
 .text-primary-custom { color: $primary !important; }
@@ -458,3 +598,135 @@ a { text-decoration: none; }
 }
 
 hr { border-color: #e2e8f0; }
+
+// ============================================================
+//  Notification checkboxes
+// ============================================================
+.notify-check-item {
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: .6rem .85rem;
+  transition: border-color .15s, background .15s;
+
+  &:has(.form-check-input:checked) {
+    border-color: $primary-light;
+    background: #eff6ff;
+  }
+
+  .form-check-input { margin-top: .15rem; }
+  .form-check-label { cursor: pointer; width: 100%; }
+}
+
+// ============================================================
+//  Mobile responsive
+// ============================================================
+@media (max-width: 767.98px) {
+
+  // コンテナ余白を縮小
+  .container { padding-left: .85rem; padding-right: .85rem; }
+
+  // ナビゲーション
+  .navbar-main {
+    padding: .5rem .75rem;
+
+    .navbar-collapse {
+      background: rgba(0,0,0,.18);
+      border-radius: 10px;
+      margin-top: .5rem;
+      padding: .4rem .5rem;
+    }
+
+    .nav-link {
+      padding: .65rem .85rem !important;
+      font-size: .95rem;
+      border-radius: 8px;
+    }
+
+    .navbar-nav.align-items-center { align-items: flex-start !important; }
+    .btn-logout { display: inline-block; margin: .25rem .5rem; }
+  }
+
+  // ページ全体
+  .page-wrapper { padding: 1rem 0 3rem; }
+
+  .page-header {
+    margin-bottom: 1rem;
+    h1, .page-title { font-size: 1.15rem; }
+    .btn { font-size: .85rem; padding: .45rem .9rem; }
+  }
+
+  // テーブル（デスクトップ専用なのでモバイルでは非表示）
+  .table-card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    .table {
+      min-width: 540px;
+      thead th, tbody td { padding: .65rem .75rem; font-size: .82rem; }
+    }
+  }
+
+  // 統計カード
+  .stat-card {
+    .stat-value { font-size: 1.6rem; font-weight: 800; }
+    .stat-icon  { width: 44px; height: 44px; font-size: 1.2rem; border-radius: 12px; }
+    .card-body  { padding: .9rem 1rem; gap: .65rem !important; }
+    .stat-label { font-size: .78rem; }
+    .stat-sub   { font-size: .75rem; }
+  }
+
+  // カード全般
+  .card {
+    border-radius: 12px;
+    .card-body { padding: .9rem 1rem; }
+    .card-header { padding: .85rem 1rem .65rem; }
+  }
+
+  // フォーム
+  .form-label { font-size: .85rem; }
+  .form-control, .form-select {
+    font-size: 1rem;
+    min-height: 46px;
+    border-radius: 10px;
+    padding: .6rem .9rem;
+  }
+  textarea.form-control { min-height: unset; }
+
+  // ボタン
+  .btn {
+    min-height: 44px;
+    border-radius: 10px;
+    &.btn-sm { min-height: 36px; font-size: .82rem; }
+  }
+
+  // モバイルカードリストの操作ボタン
+  .mobile-list-item .d-flex.gap-2 {
+    .btn { flex: 1; }
+  }
+
+  // 通知チェックボックス
+  .notify-check-item {
+    padding: .8rem 1rem;
+    .form-check-input { width: 1.25em; height: 1.25em; }
+  }
+
+  // 詳細ページのdl
+  dl.row {
+    dt.col-sm-3 { font-size: .82rem; color: #64748b; margin-bottom: .15rem; }
+    dd.col-sm-9 { font-size: .92rem; margin-bottom: 1rem; }
+  }
+
+  // breadcrumb
+  .breadcrumb { font-size: .78rem; }
+
+  // ページネーション
+  .pagination-wrapper { margin-top: 1.25rem; }
+
+  // セクションタイトル
+  .section-title { font-size: .95rem; }
+
+  // activity-list（ダッシュボードの最近の投稿）
+  .activity-list .list-group-item {
+    padding: .9rem 1rem;
+  }
+}

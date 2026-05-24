@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_04_29_231831) do
+ActiveRecord::Schema[7.0].define(version: 2026_04_22_054242) do
   create_table "business_trips", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "site_id", null: false

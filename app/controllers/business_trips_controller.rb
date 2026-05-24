@@ -6,6 +6,7 @@ class BusinessTripsController < ApplicationController
 
   def all
     @business_trips = BusinessTrip.includes(:site, :user).order(started_at: :desc)
+                                  .paginate(page: params[:page], per_page: 15)
   end
 
   def select_site
@@ -13,7 +14,8 @@ class BusinessTripsController < ApplicationController
   end
 
   def index
-    @business_trips = @site.business_trips.order(started_at: :desc)
+    @business_trips = @site.business_trips.includes(:user).order(started_at: :desc)
+                            .paginate(page: params[:page], per_page: 15)
   end
 
   def show
