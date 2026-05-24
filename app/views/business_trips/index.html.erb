@@ -74,7 +74,8 @@
               <%= link_to "編集", edit_site_business_trip_path(@site, trip), class: "btn btn-sm btn-outline-secondary" %>
               <%= button_to "削除", site_business_trip_path(@site, trip), method: :delete,
                     data: { turbo_confirm: "削除しますか？" },
-                    class: "btn btn-sm btn-outline-danger" %>
+                    class: "btn btn-sm btn-outline-danger",
+                    form: { class: "flex-fill" } %>
             <% end %>
           </div>
         </div>

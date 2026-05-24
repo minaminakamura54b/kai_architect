@@ -51,11 +51,14 @@ class BusinessTripsController < ApplicationController
   end
 
   def update
-    if @business_trip.update(business_trip_params)
+    # Rails 7はhas_many_attachedへの代入で既存ファイルを全削除するため、
+    # ファイルは別途attachして追記する
+    all_params = business_trip_params
+    new_files  = all_params.delete(:files)
+    if @business_trip.update(all_params)
+      @business_trip.files.attach(new_files) if new_files.present?
       purge_file_ids = params[:remove_file_ids]
-      if purge_file_ids.present?
-        @business_trip.files.where(id: purge_file_ids).each(&:purge)
-      end
+      @business_trip.files.where(id: purge_file_ids).each(&:purge) if purge_file_ids.present?
       redirect_to site_business_trip_path(@site, @business_trip), notice: "出張報告を更新しました"
     else
       render :edit, status: :unprocessable_entity

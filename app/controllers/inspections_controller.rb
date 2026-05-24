@@ -51,11 +51,14 @@ class InspectionsController < ApplicationController
   end
 
   def update
-    if @inspection.update(inspection_params)
+    # Rails 7はhas_many_attachedへの代入で既存ファイルを全削除するため、
+    # ファイルは別途attachして追記する
+    all_params = inspection_params
+    new_files  = all_params.delete(:files)
+    if @inspection.update(all_params)
+      @inspection.files.attach(new_files) if new_files.present?
       purge_file_ids = params[:remove_file_ids]
-      if purge_file_ids.present?
-        @inspection.files.where(id: purge_file_ids).each(&:purge)
-      end
+      @inspection.files.where(id: purge_file_ids).each(&:purge) if purge_file_ids.present?
       redirect_to site_inspection_path(@site, @inspection), notice: "点検記録を更新しました"
     else
       render :edit, status: :unprocessable_entity
