@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= full_title(yield(:title)) %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" data-turbo-track="reload"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-main">
+      <div class="container">
+        <%= link_to root_path, class: "navbar-brand" do %>
+          <span class="brand-icon">🏗</span>
+          Kai Architect
+        <% end %>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto ms-3">
+            <li class="nav-item">
+              <%= link_to "管理ダッシュボード", admin_root_path,
+                    class: "nav-link #{'active' if current_page?(admin_root_path)}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "ユーザー管理", admin_users_path,
+                    class: "nav-link #{'active' if request.path.start_with?('/admin/users')}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "現場管理", admin_sites_path,
+                    class: "nav-link #{'active' if request.path.start_with?('/admin/sites')}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "日報一覧", admin_inspections_path,
+                    class: "nav-link #{'active' if request.path.start_with?('/admin/inspections')}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "出張一覧", admin_business_trips_path,
+                    class: "nav-link #{'active' if request.path.start_with?('/admin/business_trips')}" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "← 通常画面", root_path, class: "nav-link" %>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav align-items-center gap-2">
+            <li class="nav-item">
+              <%= link_to edit_user_registration_path, class: "nav-user text-decoration-none" do %>
+                <span class="avatar"><%= current_user.name.first %></span>
+                <%= current_user.name %>
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "ログアウト", destroy_user_session_path, class: "btn-logout nav-link" %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page-wrapper">
+      <div class="container">
+        <div class="admin-badge mb-3">
+          <span>🔧 管理者画面</span>
+        </div>
+        <% if notice %>
+          <div class="alert alert-success alert-dismissible mb-4" role="alert">
+            <span>✓</span> <%= notice %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        <% end %>
+        <% if alert %>
+          <div class="alert alert-danger alert-dismissible mb-4" role="alert">
+            <span>!</span> <%= alert %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        <% end %>
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>

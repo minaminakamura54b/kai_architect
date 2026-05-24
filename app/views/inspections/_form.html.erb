@@ -1,4 +1,4 @@
-<%= form_with model: [@site, @inspection] do |f| %>
+<%= form_with model: [@site, @inspection], multipart: true do |f| %>
   <div class="row g-3 mb-3">
     <div class="col-md-6">
       <%= f.label :inspected_at, "報告日時", class: "form-label fw-semibold" %>
@@ -27,6 +27,42 @@
     <%= f.label :remarks, "備考", class: "form-label fw-semibold" %>
     <%= f.text_area :remarks, class: "form-control", rows: 3,
           placeholder: "補足事項・次回対応事項など" %>
+  </div>
+
+  <%# 編集時：添付済みファイル一覧 %>
+  <% if !@inspection.new_record? && @inspection.files.attached? %>
+    <div class="mb-3">
+      <label class="form-label fw-semibold">添付済みファイル</label>
+      <div class="border rounded p-3" style="background:#f8fafc;">
+        <% @inspection.files.each do |file| %>
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <div class="form-check mb-0">
+              <%= check_box_tag "remove_file_ids[]", file.id, false,
+                    id: "remove_file_#{file.id}", class: "form-check-input" %>
+              <label class="form-check-label d-flex align-items-center gap-1" for="remove_file_<%= file.id %>">
+                <span><%= file.content_type.start_with?("image/") ? "🖼" : "📄" %></span>
+                <span class="small"><%= file.filename %></span>
+                <span class="text-muted small">(<%= number_to_human_size(file.byte_size) %>)</span>
+              </label>
+            </div>
+          </div>
+        <% end %>
+        <div class="form-text text-danger mt-1">チェックしたファイルは更新時に削除されます</div>
+      </div>
+    </div>
+  <% end %>
+
+  <%# ファイル添付 %>
+  <div class="mb-3">
+    <%= f.label :files, "ファイル添付", class: "form-label fw-semibold" %>
+    <%= f.file_field :files, multiple: true,
+          accept: "image/jpeg,image/png,image/gif,image/webp,application/pdf",
+          capture: "environment",
+          class: "form-control #{'is-invalid' if @inspection.errors[:files].any?}" %>
+    <% if @inspection.errors[:files].any? %>
+      <div class="invalid-feedback d-block"><%= @inspection.errors[:files].join("、") %></div>
+    <% end %>
+    <div class="form-text">最大10個・1ファイル20MB以内・JPEG・PNG・GIF・WebP・PDFのみ可</div>
   </div>
 
   <% if @inspection.new_record? %>

@@ -1,0 +1,204 @@
+<% content_for :title, "管理ダッシュボード" %>
+
+<div class="page-header">
+  <h1 class="page-title">管理ダッシュボード</h1>
+</div>
+
+<%# 統計カード %>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <%= link_to admin_sites_path, class: "text-decoration-none" do %>
+      <div class="card stat-card stat-card-link">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon" style="background:#dbeafe;">🏗</div>
+          <div>
+            <div class="stat-value"><%= @sites_count %></div>
+            <div class="stat-label">現場数</div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-6 col-lg-3">
+    <%= link_to admin_users_path, class: "text-decoration-none" do %>
+      <div class="card stat-card stat-card-link">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon" style="background:#ede9fe;">👤</div>
+          <div>
+            <div class="stat-value"><%= @users_count %></div>
+            <div class="stat-label">作業員数</div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-6 col-lg-3">
+    <%= link_to admin_inspections_path, class: "text-decoration-none" do %>
+      <div class="card stat-card stat-card-link">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon" style="background:#d1fae5;">📋</div>
+          <div>
+            <div class="stat-value"><%= @this_month_inspections_count %></div>
+            <div class="stat-label">今月の日報</div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-6 col-lg-3">
+    <%= link_to admin_business_trips_path, class: "text-decoration-none" do %>
+      <div class="card stat-card stat-card-link">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon" style="background:#fef3c7;">🚗</div>
+          <div>
+            <div class="stat-value"><%= @this_month_business_trips_count %></div>
+            <div class="stat-label">今月の出張</div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <%# 未完了の日報 %>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="section-title">📋 未完了の日報</span>
+        <%= link_to "すべて見る", admin_inspections_path, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <% if @pending_inspections.any? %>
+        <div class="list-group list-group-flush activity-list">
+          <% @pending_inspections.each do |inspection| %>
+            <%= link_to admin_inspection_path(inspection), class: "list-group-item list-group-item-action" do %>
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="overflow-hidden me-2">
+                  <div class="fw-semibold small text-truncate"><%= inspection.site.name %></div>
+                  <div class="text-muted small text-truncate"><%= inspection.result %></div>
+                  <div class="text-muted" style="font-size:.75rem;"><%= inspection.user.name %> · <%= l inspection.inspected_at, format: :short %></div>
+                </div>
+                <span class="badge-<%= inspection.status %> flex-shrink-0">
+                  <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+                </span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state" style="padding:2rem;">
+          <div class="empty-icon">✅</div>
+          <p>未完了の日報はありません</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# 最近の出張報告 %>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="section-title">🚗 最近の出張報告</span>
+        <%= link_to "すべて見る", admin_business_trips_path, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <% if @recent_business_trips.any? %>
+        <div class="list-group list-group-flush activity-list">
+          <% @recent_business_trips.each do |trip| %>
+            <%= link_to admin_business_trip_path(trip), class: "list-group-item list-group-item-action" do %>
+              <div class="overflow-hidden">
+                <div class="fw-semibold small text-truncate"><%= trip.site.name %></div>
+                <div class="text-muted small text-truncate"><%= trip.destination %> — <%= trip.purpose %></div>
+                <div class="text-muted" style="font-size:.75rem;"><%= trip.user.name %> · <%= l trip.started_at, format: :short %></div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state" style="padding:2rem;">
+          <div class="empty-icon">🚗</div>
+          <p>出張報告がありません</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%# 現場ごとの進捗 %>
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span class="section-title">🏗 現場ごとの進捗</span>
+    <%= link_to "現場を追加", new_admin_site_path, class: "btn btn-sm btn-accent" %>
+  </div>
+  <% if @sites_with_progress.any? %>
+    <%# デスクトップ: テーブル %>
+    <div class="table-card d-none d-md-block">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>現場名</th>
+            <th>ステータス</th>
+            <th>日報数</th>
+            <th>出張数</th>
+            <th>未着手</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sites_with_progress.each do |site| %>
+            <tr>
+              <td class="fw-semibold"><%= site.name %></td>
+              <td>
+                <span class="badge-site-<%= site.status %>">
+                  <%= I18n.t("enums.site.status.#{site.status}", default: site.status) %>
+                </span>
+              </td>
+              <td><%= site.inspections.count %></td>
+              <td><%= site.business_trips.count %></td>
+              <td>
+                <% pending = site.inspections.where.not(status: :completed).count %>
+                <% if pending > 0 %>
+                  <span class="badge-not_started"><%= pending %>件</span>
+                <% else %>
+                  <span class="text-success fw-semibold">0件</span>
+                <% end %>
+              </td>
+              <td class="text-end">
+                <%= link_to "詳細", admin_site_path(site), class: "btn btn-sm btn-outline-primary me-1" %>
+                <%= link_to "編集", edit_admin_site_path(site), class: "btn btn-sm btn-outline-secondary" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%# モバイル: カード %>
+    <div class="card d-block d-md-none" style="box-shadow:none;">
+      <% @sites_with_progress.each do |site| %>
+        <%= link_to admin_site_path(site), class: "mobile-list-item text-decoration-none" do %>
+          <div style="flex:1; min-width:0;">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="fw-semibold text-truncate" style="font-size:.9rem; color:#1a3a5c;"><%= site.name %></span>
+              <span class="badge-site-<%= site.status %> flex-shrink-0 ms-2">
+                <%= I18n.t("enums.site.status.#{site.status}", default: site.status) %>
+              </span>
+            </div>
+            <div class="d-flex gap-3 mt-1" style="font-size:.78rem; color:#94a3b8;">
+              <span>日報 <%= site.inspections.count %>件</span>
+              <span>出張 <%= site.business_trips.count %>件</span>
+              <% pending = site.inspections.where.not(status: :completed).count %>
+              <% if pending > 0 %>
+                <span class="text-warning fw-semibold">未完了 <%= pending %>件</span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <div class="empty-icon">🏗</div>
+      <p>現場がありません</p>
+      <%= link_to "現場を登録する", new_admin_site_path, class: "btn btn-accent" %>
+    </div>
+  <% end %>
+</div>

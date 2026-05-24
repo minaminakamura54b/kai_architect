@@ -15,4 +15,13 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     new_user_session_path
   end
+
+  def require_admin!
+    redirect_to root_path, alert: "管理者のみアクセスできます" unless current_user&.admin?
+  end
+
+  def can_edit?(record)
+    current_user.admin? || record.user_id == current_user.id
+  end
+  helper_method :can_edit?
 end

@@ -1,0 +1,44 @@
+<% content_for :title, "日報詳細（管理）" %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "管理画面", admin_root_path %></li>
+    <li class="breadcrumb-item"><%= link_to "日報一覧", admin_inspections_path %></li>
+    <li class="breadcrumb-item active">詳細</li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <h1 class="page-title">日報詳細</h1>
+  <%= link_to "← 一覧に戻る", admin_inspections_path, class: "btn btn-outline-secondary btn-sm" %>
+</div>
+
+<div class="card" style="max-width:720px;">
+  <div class="card-body p-4">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">現場</dt>
+      <dd class="col-sm-9"><%= link_to @inspection.site.name, admin_site_path(@inspection.site), class: "text-primary-custom fw-semibold" %></dd>
+
+      <dt class="col-sm-3">発信者</dt>
+      <dd class="col-sm-9"><%= link_to @inspection.user.name, admin_user_path(@inspection.user), class: "text-primary-custom" %></dd>
+
+      <dt class="col-sm-3">報告日時</dt>
+      <dd class="col-sm-9"><%= l @inspection.inspected_at, format: :default %></dd>
+
+      <dt class="col-sm-3">ステータス</dt>
+      <dd class="col-sm-9">
+        <span class="badge-<%= @inspection.status %>">
+          <%= I18n.t("enums.inspection.status.#{@inspection.status}", default: @inspection.status) %>
+        </span>
+      </dd>
+
+      <dt class="col-sm-3">報告内容</dt>
+      <dd class="col-sm-9"><%= simple_format(@inspection.result) %></dd>
+
+      <% if @inspection.remarks.present? %>
+        <dt class="col-sm-3">備考</dt>
+        <dd class="col-sm-9"><%= simple_format(@inspection.remarks) %></dd>
+      <% end %>
+    </dl>
+  </div>
+</div>

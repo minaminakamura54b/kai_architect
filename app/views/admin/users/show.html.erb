@@ -1,0 +1,83 @@
+<% content_for :title, "#{@user.name} - ユーザー詳細" %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "管理画面", admin_root_path %></li>
+    <li class="breadcrumb-item"><%= link_to "ユーザー管理", admin_users_path %></li>
+    <li class="breadcrumb-item active"><%= @user.name %></li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <h1 class="page-title"><%= @user.name %></h1>
+  <%= link_to "編集", edit_admin_user_path(@user), class: "btn btn-outline-secondary btn-sm" %>
+</div>
+
+<div class="card mb-4" style="max-width:600px;">
+  <div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-4">氏名</dt>
+      <dd class="col-sm-8"><%= @user.name %></dd>
+      <dt class="col-sm-4">メールアドレス</dt>
+      <dd class="col-sm-8"><%= @user.email %></dd>
+      <dt class="col-sm-4">ロール</dt>
+      <dd class="col-sm-8">
+        <span class="badge-role-<%= @user.role %>">
+          <%= I18n.t("enums.user.role.#{@user.role}", default: @user.role) %>
+        </span>
+      </dd>
+      <dt class="col-sm-4">登録日</dt>
+      <dd class="col-sm-8"><%= l @user.created_at, format: :default %></dd>
+    </dl>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <span class="section-title">📋 日報（<%= @user.inspections.count %>件）</span>
+      </div>
+      <% if @user.inspections.any? %>
+        <div class="list-group list-group-flush activity-list">
+          <% @user.inspections.includes(:site).order(inspected_at: :desc).limit(5).each do |inspection| %>
+            <%= link_to admin_inspection_path(inspection), class: "list-group-item list-group-item-action" do %>
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="overflow-hidden me-2">
+                  <div class="small fw-semibold text-truncate"><%= inspection.site.name %></div>
+                  <div class="text-muted small text-truncate"><%= inspection.result %></div>
+                </div>
+                <span class="badge-<%= inspection.status %> flex-shrink-0">
+                  <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+                </span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state" style="padding:1.5rem;"><p class="small text-muted mb-0">日報なし</p></div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <span class="section-title">🚗 出張報告（<%= @user.business_trips.count %>件）</span>
+      </div>
+      <% if @user.business_trips.any? %>
+        <div class="list-group list-group-flush activity-list">
+          <% @user.business_trips.includes(:site).order(started_at: :desc).limit(5).each do |trip| %>
+            <%= link_to admin_business_trip_path(trip), class: "list-group-item list-group-item-action" do %>
+              <div class="overflow-hidden">
+                <div class="small fw-semibold text-truncate"><%= trip.site.name %></div>
+                <div class="text-muted small text-truncate"><%= trip.destination %> — <%= trip.purpose %></div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state" style="padding:1.5rem;"><p class="small text-muted mb-0">出張報告なし</p></div>
+      <% end %>
+    </div>
+  </div>
+</div>

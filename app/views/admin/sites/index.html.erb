@@ -1,0 +1,63 @@
+<% content_for :title, "現場管理" %>
+
+<div class="page-header">
+  <h1 class="page-title">現場管理</h1>
+  <%= link_to "＋ 現場を追加", new_admin_site_path, class: "btn btn-accent" %>
+</div>
+
+<div class="table-card d-none d-md-block">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>現場名</th>
+        <th>住所</th>
+        <th>ステータス</th>
+        <th>日報</th>
+        <th>出張</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sites.each do |site| %>
+        <tr>
+          <td class="fw-semibold"><%= site.name %></td>
+          <td class="text-muted td-truncate"><%= site.address %></td>
+          <td>
+            <span class="badge-site-<%= site.status %>">
+              <%= I18n.t("enums.site.status.#{site.status}", default: site.status) %>
+            </span>
+          </td>
+          <td><%= site.inspections.count %></td>
+          <td><%= site.business_trips.count %></td>
+          <td class="text-end text-nowrap">
+            <%= link_to "詳細", admin_site_path(site), class: "btn btn-sm btn-outline-primary me-1" %>
+            <%= link_to "編集", edit_admin_site_path(site), class: "btn btn-sm btn-outline-secondary me-1" %>
+            <%= button_to "削除", admin_site_path(site), method: :delete,
+                  data: { turbo_confirm: "「#{site.name}」を削除しますか？関連する日報・出張報告もすべて削除されます。" },
+                  class: "btn btn-sm btn-outline-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="card d-block d-md-none">
+  <% @sites.each do |site| %>
+    <%= link_to admin_site_path(site), class: "mobile-list-item text-decoration-none" do %>
+      <div style="flex:1; min-width:0;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="fw-semibold text-truncate" style="font-size:.9rem; color:#1a3a5c;"><%= site.name %></span>
+          <span class="badge-site-<%= site.status %> flex-shrink-0 ms-2">
+            <%= I18n.t("enums.site.status.#{site.status}", default: site.status) %>
+          </span>
+        </div>
+        <div class="text-truncate" style="font-size:.83rem; color:#475569;"><%= site.address %></div>
+        <div class="d-flex gap-3 mt-1" style="font-size:.77rem; color:#94a3b8;">
+          <span>日報 <%= site.inspections.count %>件</span>
+          <span>出張 <%= site.business_trips.count %>件</span>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

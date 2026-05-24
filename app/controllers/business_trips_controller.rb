@@ -3,6 +3,7 @@ class BusinessTripsController < ApplicationController
   before_action :set_site, except: [:all, :select_site]
   before_action :set_business_trip, only: [:show, :edit, :update, :destroy]
   before_action :set_users, only: [:new, :edit, :create]
+  before_action :require_owner_or_admin!, only: [:edit, :update, :destroy]
 
   def all
     @business_trips = BusinessTrip.includes(:site, :user).order(started_at: :desc)
@@ -51,6 +52,10 @@ class BusinessTripsController < ApplicationController
 
   def update
     if @business_trip.update(business_trip_params)
+      purge_file_ids = params[:remove_file_ids]
+      if purge_file_ids.present?
+        @business_trip.files.where(id: purge_file_ids).each(&:purge)
+      end
       redirect_to site_business_trip_path(@site, @business_trip), notice: "出張報告を更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -76,7 +81,12 @@ class BusinessTripsController < ApplicationController
     @users = User.order(:name)
   end
 
+  def require_owner_or_admin!
+    return if current_user.admin? || @business_trip.user_id == current_user.id
+    redirect_to site_business_trip_path(@site, @business_trip), alert: "自分の投稿のみ編集できます"
+  end
+
   def business_trip_params
-    params.require(:business_trip).permit(:started_at, :ended_at, :destination, :purpose, :report, :expenses)
+    params.require(:business_trip).permit(:started_at, :ended_at, :destination, :purpose, :report, :expenses, files: [])
   end
 end

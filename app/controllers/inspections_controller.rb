@@ -3,6 +3,7 @@ class InspectionsController < ApplicationController
   before_action :set_site, except: [:all, :select_site]
   before_action :set_inspection, only: [:show, :edit, :update, :destroy]
   before_action :set_users, only: [:new, :edit, :create]
+  before_action :require_owner_or_admin!, only: [:edit, :update, :destroy]
 
   def all
     @inspections = Inspection.includes(:site, :user).order(inspected_at: :desc)
@@ -51,6 +52,10 @@ class InspectionsController < ApplicationController
 
   def update
     if @inspection.update(inspection_params)
+      purge_file_ids = params[:remove_file_ids]
+      if purge_file_ids.present?
+        @inspection.files.where(id: purge_file_ids).each(&:purge)
+      end
       redirect_to site_inspection_path(@site, @inspection), notice: "点検記録を更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -76,7 +81,12 @@ class InspectionsController < ApplicationController
     @users = User.order(:name)
   end
 
+  def require_owner_or_admin!
+    return if current_user.admin? || @inspection.user_id == current_user.id
+    redirect_to site_inspection_path(@site, @inspection), alert: "自分の投稿のみ編集できます"
+  end
+
   def inspection_params
-    params.require(:inspection).permit(:inspected_at, :status, :result, :remarks)
+    params.require(:inspection).permit(:inspected_at, :status, :result, :remarks, files: [])
   end
 end

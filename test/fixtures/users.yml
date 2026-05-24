@@ -1,9 +1,11 @@
 one:
-  name: テストユーザー1
-  email: test1@example.com
+  name: 管理者ユーザー
+  email: admin@example.com
   encrypted_password: <%= BCrypt::Password.create('Password1') %>
+  role: 1
 
 two:
-  name: テストユーザー2
-  email: test2@example.com
+  name: 作業員ユーザー
+  email: worker@example.com
   encrypted_password: <%= BCrypt::Password.create('Password1') %>
+  role: 0

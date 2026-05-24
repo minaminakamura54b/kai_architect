@@ -9,4 +9,12 @@ Rails.application.routes.draw do
     resources :inspections
     resources :business_trips
   end
+
+  namespace :admin do
+    root "dashboard#index"
+    resources :users, only: [:index, :show, :edit, :update]
+    resources :inspections, only: [:index, :show]
+    resources :business_trips, only: [:index, :show]
+    resources :sites
+  end
 end

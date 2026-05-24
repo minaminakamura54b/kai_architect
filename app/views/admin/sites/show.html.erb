@@ -1,0 +1,85 @@
+<% content_for :title, "#{@site.name}（管理）" %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "管理画面", admin_root_path %></li>
+    <li class="breadcrumb-item"><%= link_to "現場管理", admin_sites_path %></li>
+    <li class="breadcrumb-item active"><%= @site.name %></li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <div class="d-flex align-items-center gap-3 flex-wrap">
+    <h1 class="page-title"><%= @site.name %></h1>
+    <span class="badge-site-<%= @site.status %>">
+      <%= I18n.t("enums.site.status.#{@site.status}", default: @site.status) %>
+    </span>
+  </div>
+  <div class="d-flex gap-2">
+    <%= link_to "編集", edit_admin_site_path(@site), class: "btn btn-outline-secondary btn-sm" %>
+    <%= button_to "削除", admin_site_path(@site), method: :delete,
+          data: { turbo_confirm: "「#{@site.name}」を削除しますか？" },
+          class: "btn btn-outline-danger btn-sm" %>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <p class="mb-1 text-muted small">📍 <%= @site.address %></p>
+    <% if @site.description.present? %>
+      <p class="mb-0 mt-2"><%= @site.description %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="section-title">📋 日報（<%= @site.inspections.count %>件）</span>
+        <%= link_to "すべて見る", admin_inspections_path, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <% if @site.inspections.any? %>
+        <div class="list-group list-group-flush activity-list">
+          <% @site.inspections.includes(:user).order(inspected_at: :desc).limit(5).each do |inspection| %>
+            <%= link_to admin_inspection_path(inspection), class: "list-group-item list-group-item-action" do %>
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="overflow-hidden me-2">
+                  <div class="small text-truncate"><%= inspection.result %></div>
+                  <div class="text-muted" style="font-size:.75rem;"><%= inspection.user.name %> · <%= l inspection.inspected_at, format: :short %></div>
+                </div>
+                <span class="badge-<%= inspection.status %> flex-shrink-0">
+                  <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+                </span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state" style="padding:1.5rem;"><p class="text-muted small mb-0">日報なし</p></div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="section-title">🚗 出張報告（<%= @site.business_trips.count %>件）</span>
+        <%= link_to "すべて見る", admin_business_trips_path, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <% if @site.business_trips.any? %>
+        <div class="list-group list-group-flush activity-list">
+          <% @site.business_trips.includes(:user).order(started_at: :desc).limit(5).each do |trip| %>
+            <%= link_to admin_business_trip_path(trip), class: "list-group-item list-group-item-action" do %>
+              <div class="overflow-hidden">
+                <div class="small text-truncate"><%= trip.destination %> — <%= trip.purpose %></div>
+                <div class="text-muted" style="font-size:.75rem;"><%= trip.user.name %> · <%= l trip.started_at, format: :short %></div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state" style="padding:1.5rem;"><p class="text-muted small mb-0">出張報告なし</p></div>
+      <% end %>
+    </div>
+  </div>
+</div>

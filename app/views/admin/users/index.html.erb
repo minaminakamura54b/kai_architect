@@ -1,0 +1,59 @@
+<% content_for :title, "ユーザー管理" %>
+
+<div class="page-header">
+  <h1 class="page-title">ユーザー管理</h1>
+</div>
+
+<div class="table-card d-none d-md-block">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>氏名</th>
+        <th>メールアドレス</th>
+        <th>ロール</th>
+        <th>日報数</th>
+        <th>出張数</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td class="fw-semibold"><%= user.name %></td>
+          <td class="text-muted"><%= user.email %></td>
+          <td>
+            <span class="badge-role-<%= user.role %>">
+              <%= I18n.t("enums.user.role.#{user.role}", default: user.role) %>
+            </span>
+          </td>
+          <td><%= user.inspections.count %></td>
+          <td><%= user.business_trips.count %></td>
+          <td class="text-end text-nowrap">
+            <%= link_to "詳細", admin_user_path(user), class: "btn btn-sm btn-outline-primary me-1" %>
+            <%= link_to "編集", edit_admin_user_path(user), class: "btn btn-sm btn-outline-secondary" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="card d-block d-md-none">
+  <% @users.each do |user| %>
+    <%= link_to admin_user_path(user), class: "mobile-list-item text-decoration-none" do %>
+      <div style="flex:1; min-width:0;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="fw-semibold" style="font-size:.9rem; color:#1a3a5c;"><%= user.name %></span>
+          <span class="badge-role-<%= user.role %>">
+            <%= I18n.t("enums.user.role.#{user.role}", default: user.role) %>
+          </span>
+        </div>
+        <div style="font-size:.83rem; color:#475569;"><%= user.email %></div>
+        <div class="d-flex gap-3 mt-1" style="font-size:.77rem; color:#94a3b8;">
+          <span>日報 <%= user.inspections.count %>件</span>
+          <span>出張 <%= user.business_trips.count %>件</span>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

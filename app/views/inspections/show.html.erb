@@ -4,12 +4,14 @@
 </div>
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h1 class="h3 mb-0">日報詳細</h1>
-  <div class="d-flex gap-2">
-    <%= link_to "編集", edit_site_inspection_path(@inspection.site, @inspection), class: "btn btn-sm btn-outline-secondary" %>
-    <%= button_to "削除", site_inspection_path(@inspection.site, @inspection), method: :delete,
-          data: { turbo_confirm: "削除しますか？" },
-          class: "btn btn-sm btn-outline-danger" %>
-  </div>
+  <% if can_edit?(@inspection) %>
+    <div class="d-flex gap-2">
+      <%= link_to "編集", edit_site_inspection_path(@inspection.site, @inspection), class: "btn btn-sm btn-outline-secondary" %>
+      <%= button_to "削除", site_inspection_path(@inspection.site, @inspection), method: :delete,
+            data: { turbo_confirm: "削除しますか？" },
+            class: "btn btn-sm btn-outline-danger" %>
+    </div>
+  <% end %>
 </div>
 
 <div class="card shadow-sm" style="max-width: 720px;">
@@ -23,7 +25,7 @@
 
       <dt class="col-sm-3">ステータス</dt>
       <dd class="col-sm-9">
-        <span class="badge <%= inspection_status_badge(@inspection.status) %>">
+        <span class="badge-<%= @inspection.status %>">
           <%= I18n.t("enums.inspection.status.#{@inspection.status}", default: @inspection.status) %>
         </span>
       </dd>
@@ -35,6 +37,39 @@
         <dt class="col-sm-3">備考</dt>
         <dd class="col-sm-9"><%= simple_format(@inspection.remarks) %></dd>
       <% end %>
+
+      <dt class="col-sm-3">添付ファイル</dt>
+      <dd class="col-sm-9">
+        <% if @inspection.files.attached? %>
+          <div class="d-flex flex-wrap gap-3">
+            <% @inspection.files.each do |file| %>
+              <% if file.content_type.start_with?("image/") %>
+                <div class="text-center">
+                  <%= link_to url_for(file), target: "_blank", rel: "noopener noreferrer" do %>
+                    <%= image_tag file.variant(resize_to_limit: [160, 160]),
+                          class: "rounded border",
+                          style: "max-width:160px; max-height:160px; object-fit:cover;",
+                          alt: file.filename.to_s %>
+                  <% end %>
+                  <div class="small text-muted mt-1 text-truncate" style="max-width:160px;"><%= file.filename %></div>
+                  <div class="small text-muted"><%= number_to_human_size(file.byte_size) %></div>
+                </div>
+              <% else %>
+                <div class="d-flex flex-column gap-1">
+                  <%= link_to url_for(file), target: "_blank", rel: "noopener noreferrer",
+                        class: "d-flex align-items-center gap-1 text-decoration-none" do %>
+                    <span style="font-size:1.4rem;">📄</span>
+                    <span class="small fw-semibold"><%= file.filename %></span>
+                  <% end %>
+                  <span class="small text-muted ms-1"><%= number_to_human_size(file.byte_size) %></span>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <span class="text-muted">添付ファイルなし</span>
+        <% end %>
+      </dd>
     </dl>
   </div>
 </div>

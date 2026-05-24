@@ -57,4 +57,26 @@ class UserTest < ActiveSupport::TestCase
     assert_respond_to user, :inspections
     assert_respond_to user, :business_trips
   end
+
+  test "default role is worker" do
+    user = valid_user
+    user.save!
+    assert user.worker?
+    assert_not user.admin?
+  end
+
+  test "admin role can be set" do
+    user = valid_user
+    user.role = :admin
+    user.save!
+    assert user.admin?
+  end
+
+  test "fixture one is admin" do
+    assert users(:one).admin?
+  end
+
+  test "fixture two is worker" do
+    assert users(:two).worker?
+  end
 end

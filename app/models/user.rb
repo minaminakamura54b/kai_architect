@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :inspections, dependent: :destroy
   has_many :business_trips, dependent: :destroy
 
+  enum role: { worker: 0, admin: 1 }, _default: :worker
+
   validates :name, presence: true
 
   validate :password_complexity, if: -> { password.present? }

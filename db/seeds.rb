@@ -11,21 +11,24 @@ user1 = User.create!(
   name:  "中村 南",
   email: "nakamura@example.com",
   password:              "Password1",
-  password_confirmation: "Password1"
+  password_confirmation: "Password1",
+  role: :admin
 )
 
 user2 = User.create!(
   name:  "田中 健太",
   email: "tanaka@example.com",
   password:              "Password1",
-  password_confirmation: "Password1"
+  password_confirmation: "Password1",
+  role: :worker
 )
 
 user3 = User.create!(
   name:  "佐藤 美咲",
   email: "sato@example.com",
   password:              "Password1",
-  password_confirmation: "Password1"
+  password_confirmation: "Password1",
+  role: :worker
 )
 
 # ============================================================
@@ -64,45 +67,45 @@ site4 = Site.create!(
 # ============================================================
 inspection_data = [
   # site1 の日報
-  { site: site1, user: user1, inspected_at: 25.days.ago, status: :completed,
+  { site: site1, user: user1, inspected_at: 25.days.ago,
     result: "基礎コンクリート打設完了。強度試験の結果は基準値を満たしており、問題なし。養生期間を経て次工程へ移行予定。",
     remarks: "試験体3本採取済み。7日・28日後に再確認。" },
-  { site: site1, user: user2, inspected_at: 22.days.ago, status: :completed,
+  { site: site1, user: user2, inspected_at: 22.days.ago,
     result: "1階鉄骨建方作業を実施。柱・梁の接合部ボルト締め付け完了。垂直精度は±2mm以内で合格。",
     remarks: "明日から2階の建方開始予定。" },
-  { site: site1, user: user1, inspected_at: 18.days.ago, status: :completed,
+  { site: site1, user: user1, inspected_at: 18.days.ago,
     result: "2〜4階の鉄骨建方完了。溶接検査を実施し、全箇所合格判定。足場の組み換え作業も完了。",
     remarks: nil },
-  { site: site1, user: user3, inspected_at: 15.days.ago, status: :completed,
+  { site: site1, user: user3, inspected_at: 15.days.ago,
     result: "5階・6階の床スラブコンクリート打設。打設量：220m³。天候良好により予定通り進行。",
     remarks: "脱型は3日後を予定。" },
-  { site: site1, user: user2, inspected_at: 12.days.ago, status: :in_progress,
+  { site: site1, user: user2, inspected_at: 12.days.ago,
     result: "7〜9階の外壁型枠組み立て作業中。進捗率70%。風の影響で一部作業を翌日に繰り越し。",
     remarks: "型枠材の追加発注済み（納期3日後）。" },
-  { site: site1, user: user1, inspected_at: 8.days.ago, status: :in_progress,
+  { site: site1, user: user1, inspected_at: 8.days.ago,
     result: "外壁型枠組み立て完了。検査立会いを実施し、配筋・型枠のかぶり厚さを確認。一部是正箇所あり。",
     remarks: "是正後に再検査予定。担当：田中、佐藤。" },
-  { site: site1, user: user3, inspected_at: 5.days.ago, status: :not_started,
+  { site: site1, user: user3, inspected_at: 5.days.ago,
     result: "10〜12階の建方準備。資材搬入および揚重機配置の確認を行った。天候不良のため着手は翌週予定。",
     remarks: "クレーン手配済み。" },
-  { site: site1, user: user1, inspected_at: 2.days.ago, status: :not_started,
+  { site: site1, user: user1, inspected_at: 2.days.ago,
     result: "工程会議を実施。発注者・設計事務所との定例打合せにて、仕上げ材の変更について協議。変更指示書を受領待ち。",
     remarks: "変更指示受領後に工程再調整が必要。" },
 
   # site2 の日報
-  { site: site2, user: user2, inspected_at: 30.days.ago, status: :completed,
+  { site: site2, user: user2, inspected_at: 30.days.ago,
     result: "既存倉庫の現況調査完了。ひび割れ箇所の記録と写真撮影を実施。大きな損傷は東面外壁に集中している。",
     remarks: "詳細調査報告書は来週提出予定。" },
-  { site: site2, user: user1, inspected_at: 26.days.ago, status: :completed,
+  { site: site2, user: user1, inspected_at: 26.days.ago,
     result: "耐震診断の結果を踏まえた補強設計の確認を実施。Is値0.6未満の箇所について補強計画を再検討。",
     remarks: "構造設計事務所と協議要。" },
-  { site: site2, user: user3, inspected_at: 20.days.ago, status: :completed,
+  { site: site2, user: user3, inspected_at: 20.days.ago,
     result: "鉄骨ブレース取付け工事を開始。予定箇所の半分が完了。溶接部の超音波探傷試験を並行実施。",
     remarks: nil },
-  { site: site2, user: user2, inspected_at: 14.days.ago, status: :in_progress,
+  { site: site2, user: user2, inspected_at: 14.days.ago,
     result: "鉄骨ブレース工事完了。内壁の断熱材撤去および新規断熱材の施工を開始。アスベスト含有材なし（分析済み）。",
     remarks: "廃材は分別して処分。マニフェスト管理済み。" },
-  { site: site2, user: user1, inspected_at: 7.days.ago, status: :in_progress,
+  { site: site2, user: user1, inspected_at: 7.days.ago,
     result: "内装ボード張り工事進捗50%。電気設備の配管・配線工事と並行して進めているため工程調整が必要。",
     remarks: "設備業者との工程調整MTGを来週予定。" },
   { site: site2, user: user3, inspected_at: 1.day.ago,  status: :not_started,
@@ -110,24 +113,24 @@ inspection_data = [
     remarks: "塗装着手は3日後以降。" },
 
   # site3 の日報（完了現場）
-  { site: site3, user: user2, inspected_at: 90.days.ago, status: :completed,
+  { site: site3, user: user2, inspected_at: 90.days.ago,
     result: "外壁全面打診調査完了。浮き・剥落箇所を130か所記録。優先度別に補修計画を策定。",
     remarks: nil },
-  { site: site3, user: user1, inspected_at: 75.days.ago, status: :completed,
+  { site: site3, user: user1, inspected_at: 75.days.ago,
     result: "高所作業車によるタイル張替え工事完了（優先箇所）。防水処理の施工も並行して完了。",
     remarks: "仕上がり確認写真を施主に提出済み。" },
-  { site: site3, user: user3, inspected_at: 60.days.ago, status: :completed,
+  { site: site3, user: user3, inspected_at: 60.days.ago,
     result: "全補修箇所の竣工検査を実施。発注者・管理組合立会いのもと確認を行い、合格判定。工事完了報告書を提出。",
     remarks: "保証書・引渡し書類を郵送済み。" },
 
   # site4 の日報（停止中現場）
-  { site: site4, user: user1, inspected_at: 45.days.ago, status: :completed,
+  { site: site4, user: user1, inspected_at: 45.days.ago,
     result: "既存テナント退去後の内覧を実施。残置物の確認と解体範囲の確定を行った。石綿含有調査は問題なし。",
     remarks: nil },
-  { site: site4, user: user2, inspected_at: 40.days.ago, status: :not_started,
+  { site: site4, user: user2, inspected_at: 40.days.ago,
     result: "解体工事着手準備。仮設設備の設置と防音シートの取付けを完了した段階で施主より工事一時停止の連絡。",
     remarks: "停止理由：施主側の資金調達スケジュールの変更。再開は未定。" },
-  { site: site4, user: user1, inspected_at: 35.days.ago, status: :not_started,
+  { site: site4, user: user1, inspected_at: 35.days.ago,
     result: "現場保全のための定期確認。設置済みの仮設設備に異常なし。防音シート・養生材の状態も良好。",
     remarks: "月1回の定期パトロールを継続。" },
 ]

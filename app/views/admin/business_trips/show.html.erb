@@ -1,0 +1,43 @@
+<% content_for :title, "出張報告詳細（管理）" %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "管理画面", admin_root_path %></li>
+    <li class="breadcrumb-item"><%= link_to "出張報告一覧", admin_business_trips_path %></li>
+    <li class="breadcrumb-item active">詳細</li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <h1 class="page-title">出張報告詳細</h1>
+  <%= link_to "← 一覧に戻る", admin_business_trips_path, class: "btn btn-outline-secondary btn-sm" %>
+</div>
+
+<div class="card" style="max-width:720px;">
+  <div class="card-body p-4">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">現場</dt>
+      <dd class="col-sm-9"><%= link_to @business_trip.site.name, admin_site_path(@business_trip.site), class: "text-primary-custom fw-semibold" %></dd>
+
+      <dt class="col-sm-3">担当者</dt>
+      <dd class="col-sm-9"><%= link_to @business_trip.user.name, admin_user_path(@business_trip.user), class: "text-primary-custom" %></dd>
+
+      <dt class="col-sm-3">期間</dt>
+      <dd class="col-sm-9"><%= l @business_trip.started_at %> 〜 <%= l @business_trip.ended_at %></dd>
+
+      <dt class="col-sm-3">出張先</dt>
+      <dd class="col-sm-9"><%= @business_trip.destination %></dd>
+
+      <dt class="col-sm-3">目的</dt>
+      <dd class="col-sm-9"><%= @business_trip.purpose %></dd>
+
+      <% if @business_trip.report.present? %>
+        <dt class="col-sm-3">報告内容</dt>
+        <dd class="col-sm-9"><%= simple_format(@business_trip.report) %></dd>
+      <% end %>
+
+      <dt class="col-sm-3">経費</dt>
+      <dd class="col-sm-9"><%= @business_trip.expenses ? "#{number_with_delimiter(@business_trip.expenses.to_i)}円" : "未入力" %></dd>
+    </dl>
+  </div>
+</div>

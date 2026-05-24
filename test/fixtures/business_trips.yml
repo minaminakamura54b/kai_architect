@@ -1,13 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   user: one
   site: one
   started_at: 2026-04-21
   ended_at: 2026-04-21
-  destination: MyString
-  purpose: MyText
-  report: MyText
+  destination: テスト出張先
+  purpose: テスト目的
+  report: テスト報告内容
   expenses: 9.99
 
 two:
@@ -15,7 +13,7 @@ two:
   site: two
   started_at: 2026-04-21
   ended_at: 2026-04-21
-  destination: MyString
-  purpose: MyText
-  report: MyText
+  destination: テスト出張先2
+  purpose: テスト目的2
+  report: テスト報告内容2
   expenses: 9.99

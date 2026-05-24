@@ -4,12 +4,14 @@
 </div>
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h1 class="h3 mb-0">出張報告詳細</h1>
-  <div class="d-flex gap-2">
-    <%= link_to "編集", edit_site_business_trip_path(@site, @business_trip), class: "btn btn-sm btn-outline-secondary" %>
-    <%= button_to "削除", site_business_trip_path(@site, @business_trip), method: :delete,
-          data: { turbo_confirm: "削除しますか？" },
-          class: "btn btn-sm btn-outline-danger" %>
-  </div>
+  <% if can_edit?(@business_trip) %>
+    <div class="d-flex gap-2">
+      <%= link_to "編集", edit_site_business_trip_path(@site, @business_trip), class: "btn btn-sm btn-outline-secondary" %>
+      <%= button_to "削除", site_business_trip_path(@site, @business_trip), method: :delete,
+            data: { turbo_confirm: "削除しますか？" },
+            class: "btn btn-sm btn-outline-danger" %>
+    </div>
+  <% end %>
 </div>
 
 <div class="card shadow-sm" style="max-width: 720px;">
@@ -34,6 +36,39 @@
 
       <dt class="col-sm-3">経費</dt>
       <dd class="col-sm-9"><%= @business_trip.expenses ? "#{number_with_delimiter(@business_trip.expenses.to_i)}円" : "未入力" %></dd>
+
+      <dt class="col-sm-3">添付ファイル</dt>
+      <dd class="col-sm-9">
+        <% if @business_trip.files.attached? %>
+          <div class="d-flex flex-wrap gap-3">
+            <% @business_trip.files.each do |file| %>
+              <% if file.content_type.start_with?("image/") %>
+                <div class="text-center">
+                  <%= link_to url_for(file), target: "_blank", rel: "noopener noreferrer" do %>
+                    <%= image_tag file.variant(resize_to_limit: [160, 160]),
+                          class: "rounded border",
+                          style: "max-width:160px; max-height:160px; object-fit:cover;",
+                          alt: file.filename.to_s %>
+                  <% end %>
+                  <div class="small text-muted mt-1 text-truncate" style="max-width:160px;"><%= file.filename %></div>
+                  <div class="small text-muted"><%= number_to_human_size(file.byte_size) %></div>
+                </div>
+              <% else %>
+                <div class="d-flex flex-column gap-1">
+                  <%= link_to url_for(file), target: "_blank", rel: "noopener noreferrer",
+                        class: "d-flex align-items-center gap-1 text-decoration-none" do %>
+                    <span style="font-size:1.4rem;">📄</span>
+                    <span class="small fw-semibold"><%= file.filename %></span>
+                  <% end %>
+                  <span class="small text-muted ms-1"><%= number_to_human_size(file.byte_size) %></span>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <span class="text-muted">添付ファイルなし</span>
+        <% end %>
+      </dd>
     </dl>
   </div>
 </div>

@@ -1,0 +1,20 @@
+<% content_for :title, "#{@site.name} - 編集" %>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "管理画面", admin_root_path %></li>
+    <li class="breadcrumb-item"><%= link_to "現場管理", admin_sites_path %></li>
+    <li class="breadcrumb-item"><%= link_to @site.name, admin_site_path(@site) %></li>
+    <li class="breadcrumb-item active">編集</li>
+  </ol>
+</nav>
+
+<div class="page-header">
+  <h1 class="page-title">現場を編集</h1>
+</div>
+
+<div class="card" style="max-width:600px;">
+  <div class="card-body p-4">
+    <%= render "form" %>
+  </div>
+</div>

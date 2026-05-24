@@ -1,0 +1,69 @@
+<% content_for :title, "日報一覧（管理）" %>
+
+<div class="page-header">
+  <h1 class="page-title">日報一覧</h1>
+</div>
+
+<% if @inspections.any? %>
+  <div class="table-card d-none d-md-block">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>報告日時</th>
+          <th>現場</th>
+          <th>発信者</th>
+          <th>内容</th>
+          <th>ステータス</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @inspections.each do |inspection| %>
+          <tr>
+            <td class="text-nowrap fw-semibold"><%= l inspection.inspected_at, format: :short %></td>
+            <td class="td-truncate-sm"><%= inspection.site.name %></td>
+            <td class="text-nowrap"><%= inspection.user.name %></td>
+            <td class="td-truncate"><%= inspection.result %></td>
+            <td>
+              <span class="badge-<%= inspection.status %>">
+                <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+              </span>
+            </td>
+            <td class="text-end">
+              <%= link_to "詳細", admin_inspection_path(inspection), class: "btn btn-sm btn-outline-primary" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card d-block d-md-none">
+    <% @inspections.each do |inspection| %>
+      <%= link_to admin_inspection_path(inspection), class: "mobile-list-item text-decoration-none" do %>
+        <div style="flex:1; min-width:0;">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge-<%= inspection.status %> flex-shrink-0">
+              <%= I18n.t("enums.inspection.status.#{inspection.status}", default: inspection.status) %>
+            </span>
+            <span class="text-muted" style="font-size:.78rem;"><%= l inspection.inspected_at, format: :short %></span>
+          </div>
+          <div class="fw-semibold text-truncate" style="font-size:.9rem; color:#1a3a5c;"><%= inspection.site.name %></div>
+          <div class="text-truncate mt-1" style="font-size:.83rem; color:#475569;"><%= truncate(inspection.result, length: 55) %></div>
+          <div class="mt-1" style="font-size:.77rem; color:#94a3b8;"><%= inspection.user.name %></div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="pagination-wrapper">
+    <%= will_paginate @inspections %>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <p>日報がありません</p>
+    </div>
+  </div>
+<% end %>

@@ -24,6 +24,10 @@ ja:
         not_started: 未着手
         in_progress: 継続中
         completed: 完了
+    user:
+      role:
+        worker: 作業員
+        admin: 管理者
   activerecord:
     errors:
       messages:

@@ -73,8 +73,8 @@ Rails.application.configure do
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
-  # アップロードされたファイルをAWSに保存する
-  config.active_storage.service = :local
+  # アップロードされたファイルをAWS S3に保存する
+  config.active_storage.service = :amazon
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new

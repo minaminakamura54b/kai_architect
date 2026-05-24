@@ -41,10 +41,12 @@
             </td>
             <td class="text-end text-nowrap">
               <%= link_to "詳細", site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-primary me-1" %>
-              <%= link_to "編集", edit_site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-secondary me-1" %>
-              <%= button_to "削除", site_inspection_path(@site, inspection), method: :delete,
-                    data: { turbo_confirm: "削除しますか？" },
-                    class: "btn btn-sm btn-outline-danger" %>
+              <% if can_edit?(inspection) %>
+                <%= link_to "編集", edit_site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-secondary me-1" %>
+                <%= button_to "削除", site_inspection_path(@site, inspection), method: :delete,
+                      data: { turbo_confirm: "削除しますか？" },
+                      class: "btn btn-sm btn-outline-danger" %>
+              <% end %>
             </td>
           </tr>
         <% end %>
@@ -69,10 +71,12 @@
         <div class="mt-1" style="font-size:.77rem; color:#94a3b8;"><%= inspection.user.name %></div>
         <div class="d-flex gap-2 mt-3">
           <%= link_to "詳細", site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-primary" %>
-          <%= link_to "編集", edit_site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-secondary" %>
-          <%= button_to "削除", site_inspection_path(@site, inspection), method: :delete,
-                data: { turbo_confirm: "削除しますか？" },
-                class: "btn btn-sm btn-outline-danger" %>
+          <% if can_edit?(inspection) %>
+            <%= link_to "編集", edit_site_inspection_path(@site, inspection), class: "btn btn-sm btn-outline-secondary" %>
+            <%= button_to "削除", site_inspection_path(@site, inspection), method: :delete,
+                  data: { turbo_confirm: "削除しますか？" },
+                  class: "btn btn-sm btn-outline-danger" %>
+          <% end %>
         </div>
       </div>
     <% end %>

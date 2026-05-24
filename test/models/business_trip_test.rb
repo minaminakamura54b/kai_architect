@@ -68,4 +68,5 @@ class BusinessTripTest < ActiveSupport::TestCase
     trip.report = nil
     assert trip.valid?
   end
+
 end

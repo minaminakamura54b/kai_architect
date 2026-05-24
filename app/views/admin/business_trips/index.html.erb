@@ -1,0 +1,64 @@
+<% content_for :title, "出張報告一覧（管理）" %>
+
+<div class="page-header">
+  <h1 class="page-title">出張報告一覧</h1>
+</div>
+
+<% if @business_trips.any? %>
+  <div class="table-card d-none d-md-block">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>期間</th>
+          <th>現場</th>
+          <th>担当者</th>
+          <th>出張先</th>
+          <th>目的</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @business_trips.each do |trip| %>
+          <tr>
+            <td class="text-nowrap fw-semibold"><%= l trip.started_at, format: :short %> 〜 <%= l trip.ended_at, format: :short %></td>
+            <td class="td-truncate-sm"><%= trip.site.name %></td>
+            <td class="text-nowrap"><%= trip.user.name %></td>
+            <td class="td-truncate-sm"><%= trip.destination %></td>
+            <td class="td-truncate"><%= trip.purpose %></td>
+            <td class="text-end">
+              <%= link_to "詳細", admin_business_trip_path(trip), class: "btn btn-sm btn-outline-primary" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card d-block d-md-none">
+    <% @business_trips.each do |trip| %>
+      <%= link_to admin_business_trip_path(trip), class: "mobile-list-item text-decoration-none" do %>
+        <div style="flex:1; min-width:0;">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="fw-semibold text-truncate" style="font-size:.9rem; color:#1a3a5c;"><%= trip.destination %></span>
+            <span class="text-muted flex-shrink-0 ms-2" style="font-size:.78rem;">
+              <%= l trip.started_at, format: :short %> 〜 <%= l trip.ended_at, format: :short %>
+            </span>
+          </div>
+          <div class="text-truncate" style="font-size:.83rem; color:#475569;"><%= trip.site.name %> · <%= truncate(trip.purpose, length: 40) %></div>
+          <div class="mt-1" style="font-size:.77rem; color:#94a3b8;"><%= trip.user.name %></div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="pagination-wrapper">
+    <%= will_paginate @business_trips %>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="empty-state">
+      <div class="empty-icon">🚗</div>
+      <p>出張報告がありません</p>
+    </div>
+  </div>
+<% end %>
